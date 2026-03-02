@@ -1,74 +1,83 @@
 import { create } from 'zustand';
+<<<<<<< Updated upstream
 import { produce } from 'immer';
 
 
 // Factories now return plain objects
 const createCard = (name, time, effect) => ({ name, time, effect });
+=======
+import { makeAutoObservable } from "mobx";
+class Card {
+  constructor(name, cost, exec, suggested){
+    this.name = name;
+    this.cost = cost;
+    this.exec = exec;
+    this.suggested = suggested //can be self, opponent, allies
+  }
+}
+>>>>>>> Stashed changes
 
-const createDeck = (initCards) => ({
-  hand: [],
-  drawn: [...initCards],
-  discard: [],
-  allCards: [...initCards],
-});
+class Deck {
+  constructor(initDeck){
+    this.hand = [];
+    this.drawn = initDeck;
+    this.discard = [];
+    this.allCards = initDeck;
+    makeAutoObservable(this);
+  }
 
-const createEntity = (name, health, initCards) => ({
-  name,
-  health,
-  shield: 0,
-  deck: createDeck(initCards),
-  intents: [1, 2, 3],
-});
+  drawCard(){
+    let newCardIdx = Math.floor(Math.random()*this.drawn.length)
+    this.hand.push(this.drawn[newCardIdx])
+  }
+}
+
+class Entity {
+  constructor(name, health, deck) {
+    this.name = name;
+    this.health = health;
+    this.maxHealth = health;
+    this.deck = new Deck(deck);
+    this.intents = []
+    this.drawCard(3)
+    if (this.name !='player') {
+      this.intents = [
+        {"round": this.deck.hand[0].cost + 1*Math.ceil(2*Math.random()), "card": this.deck.hand[0]},
+        {"round": this.deck.hand[1].cost + 2*Math.ceil(2*Math.random()), "card": this.deck.hand[1]},
+        {"round": this.deck.hand[2].cost + 3*Math.ceil(2*Math.random()), "card": this.deck.hand[2]},
+      ]
+    }
+    makeAutoObservable(this); // Magic happens here
+  }
+  takeDamage(amount) { this.health -= amount; }
+  addShield(amount) {this.shield += amount; }
+  playCard(target, idx) {
+    const card = this.deck.hand[idx];
+    card.exec(this, target);
+    this.deck.hand.splice(idx, 1);
+  }
+  drawCard(n){ for (let i = 0; i<n; i++) this.deck.drawCard() }
+}
+
+
 
 // Define your cards with "Effect" strings or logic keys
-const basic_attack = createCard("Basic Attack", 1, "ATTACK_3");
-const basic_shield = createCard("Basic Shield", 2, "SHIELD_5");
+const basic_attack = new Card("Basic Attack", 1, function(a, b){b.takeDamage(3)});
+const basic_shield = new Card("Basic Shield", 2, function(a, b){b.addShield(5)});
+const e1 = new Entity('e1', 10, [basic_attack, basic_attack, basic_shield])
+const e2 = new Entity('e1', 10, [basic_attack, basic_attack, basic_shield])
+const e3 = new Entity('e1', 10, [basic_attack, basic_attack, basic_shield])
+
+const player = new Entity('player', 100, [basic_attack, basic_attack, basic_attack, basic_attack, basic_shield, basic_shield])
 
 export const useGameStore = create((set) => ({
   // --- STATE ---
+<<<<<<< Updated upstream
   player: 0,
+=======
+  player: player,
+  enemies: [[e1, e2, e3]],
+>>>>>>> Stashed changes
   round: 0,
-  entities:{
-    player: createEntity("Hero", 100, [basic_attack, basic_shield]),
-    enemies: [[createEntity("e1", 10, [basic_attack])]],
-    getTarget: function(target){
-        if(target[0]=='player') return this.player
-        if(target[0] == 'enemies') return this.enemies[0][target[1]]
-    }
-  },
-
-  // --- ACTIONS (The Logic) ---
-  
-  playerDrawCard: () => set(produce(state => {
-    const deck = state.entities.player.deck;
-    if (deck.allCards.length > 0) {
-      const idx = Math.floor(Math.random() * deck.allCards.length);
-      deck.hand.push(deck.allCards[idx]);
-    }
-  })),
-  playerUsedCard: (cardIdx) => set(produce(state => {
-    state.entities.player.deck.hand.splice(cardIdx, 1);
-  })),
-
-  playCard: (user, target1, cardIdx) => set(produce(state => {
-    const card = state.entities.player.deck.hand[cardIdx];
-    const target = state.entities.getTarget(target1); // Current wave
-
-    // Logic for Damage
-    if (card.effect === "ATTACK_3") {
-      let damage = 3;
-      if (target.shield >= damage) {
-        target.shield -= damage;
-      } else {
-        damage -= target.shield;
-        target.shield = 0;
-        target.health -= damage;
-      }
-    } 
-    
-    // Logic for Shield
-    if (card.effect === "SHIELD_5") {
-      target.shield += 5;
-    }
-  })),
+  action_queue:[]
 }));

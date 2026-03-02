@@ -2,12 +2,17 @@ import React from 'react';
 import { useState } from 'react';
 import { useGameStore } from '../store/useBattleStore.js'; // Adjust path
 import './BattleView.css';
+import { observer } from "mobx-react"
 
+<<<<<<< Updated upstream
 // Enemy unit subcomponent (now only contains the card, no intents)
 const EnemyUnit = ({ onPress, enemy }) => {
   // Calculate health percentage (assuming maxHealth exists, fallback to 100)
   const healthPercent = (enemy.health / (enemy.maxHealth || 100)) * 100;
 
+=======
+const EnemyUnit = observer(({ onPress, enemy }) => {
+>>>>>>> Stashed changes
   return (
     <div onClick={onPress} className='enemyCard'>
       <img src={enemy.image} alt="Enemy" className='enemyImg' />
@@ -23,6 +28,7 @@ const EnemyUnit = ({ onPress, enemy }) => {
         {/* Shield (optional, can also be a bar) */}
         <p>Shield: {enemy.shield || 0}</p>
       </div>
+<<<<<<< Updated upstream
     </div>
   );
 };
@@ -34,11 +40,29 @@ export const BattleView = () => {
   const playerUsedCard = useGameStore(s => s.playerUsedCard);
   const playCard = useGameStore(s => s.playCard);
   const player2 = useGameStore(s => s.player);
+=======
+      
+      {/* Bookmark Intent Icons */}
+      <div className='intentBar'>
+        {enemy.intents.slice(0, 3).map((move, i) => (
+          <div key={i} className='bookmark' title={move.card.name}>
+            {move.round}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+});
+>>>>>>> Stashed changes
 
+export const BattleView = observer(() => {
+  const player = useGameStore(s => s.player);
+  const enemies = useGameStore(s => s.enemies[0]);
   const [selectedCardIdx, setSelectedCardIdx] = useState(null);
   const [currentTurn, setCurrentTurn] = useState(1); // Example turn state
 
   const handleTargetSelect = (target) => {
+<<<<<<< Updated upstream
     if (selectedCardIdx !== null) {
       playCard(player, target, selectedCardIdx);
       playerUsedCard();
@@ -48,6 +72,14 @@ export const BattleView = () => {
 
   // Placeholder synergy value (replace with actual store data)
   const synergy = 3;
+=======
+    if (selectedCardIdx !== null) { player.playCard(target, selectedCardIdx); }
+  };
+
+  const playerDrawCard = () => { player.drawCard(2) }
+
+
+>>>>>>> Stashed changes
 
   return (
     <div className='battleContainer'>
@@ -67,6 +99,7 @@ export const BattleView = () => {
       {/* Enemies Row - each enemy now in a wrapper with intents on side */}
       <div className='enemy-row-wrapper'>
         {enemies.map((enemy, idx) => (
+<<<<<<< Updated upstream
           <div key={idx} className='enemy-wrapper'>
             <EnemyUnit onPress={() => handleTargetSelect(['enemies', idx])} enemy={enemy} />
             {/* Intents moved outside card, to the side */}
@@ -93,6 +126,20 @@ export const BattleView = () => {
           <div className="stat-bar health-bar">
             <div className="bar-fill" style={{ width: `${(player.health / 100) * 100}%` }}></div>
             <span className="bar-text">{player.health} / 100</span>
+=======
+          <EnemyUnit onPress={() => handleTargetSelect(enemy)} key={idx} enemy={enemy} />
+        ))}
+      </div>
+
+      {/* Bottom Layout */}
+      <div className='footerRow'>
+        {/* Player Section */}
+        <div onClick={() => handleTargetSelect(['player', 0])} className='playerSection'>
+          <img src={player.image} alt="Player" className='playerImg' />
+          <div className='statsOverlay'>
+            <p>Health: {player.health}</p>
+            <p>Shield: {player.shield}</p>
+>>>>>>> Stashed changes
           </div>
           <p>Shield: {player.shield}</p>
         </div>
@@ -135,4 +182,4 @@ export const BattleView = () => {
 </div>
     </div>
   );
-};
+});
