@@ -31,21 +31,21 @@ const EnemyUnit = observer(({ onPress, enemy }) => {
 export const BattleView = observer(() => {
   const player = useGameStore(s => s.player);
   const enemies = useGameStore(s => s.enemies[0]);
+  const gameManager = useGameStore(s => s.gameManager);
+
   const [selectedCardIdx, setSelectedCardIdx] = useState(null);
   const [currentTurn, setCurrentTurn] = useState(1); // Example turn state
 
   const handleTargetSelect = (target) => {
     if (selectedCardIdx !== null) {
-      playCard(player, target, selectedCardIdx);
-      playerUsedCard();
+      gameManager.intentAction(target, selectedCardIdx);
       setSelectedCardIdx(null);
     }
   };
 
   // Placeholder synergy value (replace with actual store data)
   const synergy = 3;
-  if (selectedCardIdx !== null) { player.playCard(target, selectedCardIdx); }
-  const playerDrawCard = () => { player.drawCard(2) }
+  const playerDrawCard = () => { gameManager.drawCard(1) }
 
 
 
@@ -57,7 +57,7 @@ export const BattleView = observer(() => {
           <span className='synergy-icon'>⚡</span>
           <span className='synergy-value'>Synergy: {synergy}</span>
         </div>
-        <div className='turn-indicator'>Turn {currentTurn}</div>
+        <div className='turn-indicator'>Time {gameManager.time}</div>
         <div className='top-right-placeholder'>{/* optional right element */}
             <button className='clickable setting'>Setting</button>
             </div>
@@ -73,7 +73,7 @@ export const BattleView = observer(() => {
             <div className='enemy-intents'>
               {enemy.intents.slice(0, 3).map((move, i) => (
                 <div key={i} className='intent-icon' title={move.card.name}>
-                  {move.round}
+                  {move.time}
                 </div>
               ))}
             </div>
@@ -82,57 +82,57 @@ export const BattleView = observer(() => {
       </div>
 
     {/* Bottom Layout */}
-<div className='footerRow'>
-  {/* Left Section: Deck above, then Player + Refresh side by side */}
-  <div className='player-area'>
-    <button className='clickable deck-button'>Deck</button>
-    <div className='player-row'>
-      <div onClick={() => handleTargetSelect(player)} className='playerSection'>
-        <img src={player.image} alt="Player" className='playerImg' />
-        <div className='statsOverlay'>
-          <div className="stat-bar health-bar">
-            <div className="bar-fill" style={{ width: `${(player.health / 100) * 100}%` }}></div>
-            <span className="bar-text">{player.health} / 100</span>
+      <div className='footerRow'>
+          {/* Left Section: Deck above, then Player + Refresh side by side */}
+          <div className='player-area'>
+            <button className='clickable deck-button'>Deck</button>
+            <div className='player-row'>
+              <div onClick={() => handleTargetSelect(player)} className='playerSection'>
+                <img src={player.image} alt="Player" className='playerImg' />
+                <div className='statsOverlay'>
+                  <div className="stat-bar health-bar">
+                    <div className="bar-fill" style={{ width: `${(player.health / 100) * 100}%` }}></div>
+                    <span className="bar-text">{player.health} / 100</span>
+                  </div>
+                  <p>Shield: {player.shield}</p>
+                </div>
+              </div>
+              <button onClick={playerDrawCard} className='clickable refresh-button'>Refresh Hand</button>
+            </div>
           </div>
-          <p>Shield: {player.shield}</p>
-        </div>
-      </div>
-      <button onClick={playerDrawCard} className='clickable refresh-button'>Refresh Hand</button>
-    </div>
-  </div>
 
-  {/* Hand Section */}
-<div className='handRow'>
-  {player.deck.hand.map((card, idx) => (
-    <button
-      key={idx}
-      onClick={() => setSelectedCardIdx(idx)}
-      className={`card ${idx === selectedCardIdx ? 'selectedCard' : ''}`}
-    >
-      <div className='card-header'>{card.name}</div>
-      <div className='card-image'>
-        <img src={card.image || 'default-card.jpg'} alt={card.name} />
-      </div>
-      <div className='card-description'>{card.description || 'No description'}</div>
-      <div className='card-traits-left'>
-        {card.traits?.slice(0, 2).map((trait, i) => (
-          <span key={i} className='trait-icon' title={trait.name}>{trait.icon}</span>
-        ))}
-      </div>
-      <div className='card-traits-right'>
-        {card.traits?.slice(2, 4).map((trait, i) => (
-          <span key={i} className='trait-icon' title={trait.name}>{trait.icon}</span>
-        ))}
-      </div>
-    </button>
-  ))}
-</div>
+          {/* Hand Section */}
+          <div className='handRow'>
+            {player.deck.hand.map((card, idx) => (
+              <button
+                key={idx}
+                onClick={() => setSelectedCardIdx(idx)}
+                className={`card ${idx === selectedCardIdx ? 'selectedCard' : ''}`}
+              >
+                <div className='card-header'>{card.name}</div>
+                <div className='card-image'>
+                  <img src={card.image || 'default-card.jpg'} alt={card.name} />
+                </div>
+                <div className='card-description'>{card.description || 'No description'}</div>
+                <div className='card-traits-left'>
+                  {card.traits?.slice(0, 2).map((trait, i) => (
+                    <span key={i} className='trait-icon' title={trait.name}>{trait.icon}</span>
+                  ))}
+                </div>
+                <div className='card-traits-right'>
+                  {card.traits?.slice(2, 4).map((trait, i) => (
+                    <span key={i} className='trait-icon' title={trait.name}>{trait.icon}</span>
+                  ))}
+                </div>
+              </button>
+            ))}
+          </div>
 
-  {/* Right Section: Draw Card button only */}
-  <div className='draw-area'>
-    <button onClick={playerDrawCard} className='clickable draw-button'>Draw Card</button>
+          {/* Right Section: Draw Card button only */}
+          <div className='draw-area'>
+            <button onClick={playerDrawCard} className='clickable draw-button'>Draw Card</button>
+          </div>
+      </div>
   </div>
-</div>
-    </div>
   );
 });
