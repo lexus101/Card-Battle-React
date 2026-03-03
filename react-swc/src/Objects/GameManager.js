@@ -9,13 +9,13 @@ export class GameManager{
         makeAutoObservable(this);
     }
     progressTime(t){
-        for (let i = 1; i < t + 1; i++){
+        for (let i = 0; i < t + 1; i++){
             this.time +=1;
             let pi = this.player.intents[0];
-            if (pi){if (pi.time == this.time) this.player.playCard(pi.target, pi.card_idx);}
+            if (pi){if (pi.time <= this.time) this.player.playCard(pi.target, pi.card_idx);}
             this.enemies[this.enemies_index].forEach(e => {
                 let ei = e.intents[0];
-                if (ei.time == this.time) e.playCard(ei.target, ei.card);
+                if (ei.time <= this.time) e.playCard(ei.target, ei.card);
             });
         }
         
@@ -32,6 +32,7 @@ export class GameManager{
     }
     intentAction(target, card_idx){
         let card = this.player.deck.hand[card_idx];
+        console.log(card, target)
         this.player.intents.push({
             'time': this.time + card.time_cost,
             'target': target,
