@@ -6,15 +6,41 @@
         {"card":"STRIKE", "target":"player", "time": 2},
         {"card":"STRIKE", "target":"player", "time": 2},
         {"card":"PATCH_UP", "target":"self", "time": 3}
+    ],
+    "image": "/goblin.webp"
+  },
+  "SKELETON":{
+    "name": "Skeleton",
+    "hp": 1,
+    "pattern":[
+        {"card":"WEAK_STRIKE", "target":"player", "time": 1}
+    ],
+    "image": "/skeleton.webp"
+  },
+  "BANDIT": {
+    "name": "Bandit",
+    "hp": 15,
+    "pattern":[
+        {"card":"STRIKE", "target":"player", "time": 2},
+        {"card":"DEFEND", "target":"player", "time": 2},
+        {"card":"PATCH_UP", "target":"self", "time": 1}
     ]
   },
-  "VAMPIRE_Bat": {
-    "name": "Vampire Bat",
-    "hp": 50,
+  "SLIME":{
+    "name": "Slime",
+    "hp": 20,
     "pattern":[
-        {"card":"VAMPIRE", "target":"player", "time": 2},
-        {"card":"VAMPIRE", "target":"player", "time": 2},
-        {"card":"PATCH_UP", "target":"self", "time": 3}
+        {"card":"STRIKE", "target":"player", "time": 2}
     ]
+  },
+  "VAMPIRE_BAT": {
+    "name": "Vampire Bat",
+    "hp": 30,
+    "pattern":[
+        {"card":"VAMPIRE", "target":"player", "time": 1},
+        {"card":"VAMPIRE", "target":"player", "time": 1},
+        {"card":"PATCH_UP", "target":"self", "time": 2}
+    ],
+    "image": "/vampire_bat.webp"
   }
 }

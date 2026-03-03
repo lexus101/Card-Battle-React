@@ -11,15 +11,23 @@ export class GameManager{
     progressTime(t){
         for (let i = 0; i < t + 1; i++){
             if (i!=0) this.time +=1;
-            let pi = this.player.intents[0];
-            if (pi){if (pi.time <= this.time) this.player.playCard(pi.target, pi.card_idx);}
-            this.enemies[this.enemies_index].forEach(e => {
-                let ei = e.intents[0];
-                if (ei.time <= this.time) e.playCard(ei.target, ei.card);
-            });
+            this.runIntents()
+            this.updateGame()
         }
-        
-        this.updateGame()
+    }
+    runIntents(){
+        let pi = this.player.intents[0];
+        if (pi){if (pi.time <= this.time) {
+            this.player.playCard(pi.target, this.player.deck.hand[pi.card_idx], pi.card_idx);
+            }
+        }
+        this.enemies[this.enemies_index].forEach(e => {
+            if (e.alive){
+                let ei = e.intents[0];
+                let matchTarget = {"player": this.player, "self": e}
+                if (ei.time <= this.time) e.playCard(matchTarget[ei.target], ei.card);
+            }
+        });
     }
     updateGame(){
         this.player.checkAlive()
@@ -27,7 +35,7 @@ export class GameManager{
 
         let allEnemyDead = true;
         this.enemies[this.enemies_index].forEach(e => { if (e.alive){ allEnemyDead = false; }})
-        if(allEnemyDead){ this.enemies_index += 1;}
+        if(allEnemyDead){ this.time = 0; this.enemies_index += 1;}
 
     }
     intentAction(target, card_idx){

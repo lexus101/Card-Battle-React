@@ -5,7 +5,7 @@ export function createEnemy(type) {
   if (!data) throw new Error(`Enemy type ${type} not found!`);
   
   // Return a new instance using the data
-  const enemy = new Enemy(data.name, data.hp);
+  const enemy = new Enemy(data.name, data.hp, data.image);
   enemy.initializeIntents(data.pattern);
   return enemy
 }

@@ -1,45 +1,40 @@
 import { create } from 'zustand';
 import { Enemy, Player } from '../Objects/Entity';
 import { GameManager } from '../Objects/GameManager';
-import { CardLibrary } from '../engine/cardEffects';
-
+import { createEnemy } from '../engine/enemyRegistry';
 // Define your cards with "Effect" strings or logic keys
 
-const player = new Player('player', 20, [
-  CardLibrary.STRIKE, 
-  CardLibrary.STRIKE, 
-  CardLibrary.DOUBLE_STRIKE,
-  CardLibrary.HEAVY_STRIKE,
-  CardLibrary.FIVEFOLD_STRIKE,
-  CardLibrary.DEFEND,
-  CardLibrary.QUICK_STEP,
-  CardLibrary.PATCH_UP,
-  CardLibrary.FOCUS,
+const player = new Player('player', 20, null, [
+  "STRIKE", 
+  "STRIKE", 
+  "DOUBLE_STRIKE",
+  "HEAVY_STRIKE",
+  "FIVEFOLD_STRIKE",
+  "DEFEND",
+  "QUICK_STEP",
+  "PATCH_UP",
+  "FOCUS"
 ])
-const skeleton = new Enemy('Skeleton', 20)
-skeleton.initializeIntents([
-    {'card':CardLibrary.STRIKE, 'target':player, 'time': 2},
-    {'card':CardLibrary.STRIKE, 'target':player, 'time': 1},
-    {'card':CardLibrary.DEFEND, 'target':skeleton, 'time': 3}, 
-  ]
-)
-const bandit = new Enemy('Bandit', 30)
-bandit.initializeIntents([
-    {'card':CardLibrary.STRIKE, 'target':player, 'time': 2},
-    {'card':CardLibrary.DEFEND, 'target':bandit, 'time': 2}, 
-    {'card':CardLibrary.PATCH_UP, 'target':bandit, 'time': 1}, 
-  ]
-)
-const slime = new Enemy('Slime', 20)
-slime.initializeIntents([
-    {'card':CardLibrary.STRIKE, 'target':player, 'time': 2},
-  ]
-)
-const enemies = [[skeleton], [bandit], [slime,skeleton]]
 
+const g1 = createEnemy('GOBLIN')
+const g2 = createEnemy('GOBLIN')
+
+const s1 = createEnemy('SKELETON')
+const s2 = createEnemy('SKELETON')
+const s3 = createEnemy('SKELETON')
+const s4 = createEnemy('SKELETON')
+const s5 = createEnemy('SKELETON')
+
+const s6 = createEnemy('SKELETON')
+const v1 = createEnemy('VAMPIRE_BAT')
+const s7 = createEnemy('SKELETON')
+
+
+const enemies = [[g1, g2], [s1,s2,s3,s4,s5],[s6,v1,s7]]
+const gameManager = new GameManager(player, enemies)
 export const useGameStore = create((set) => ({
   // --- STATE ---
   player: player,
   enemies: enemies,
-  gameManager: new GameManager(player, enemies),
+  gameManager: gameManager
 }));

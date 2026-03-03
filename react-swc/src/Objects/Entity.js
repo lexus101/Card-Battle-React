@@ -2,14 +2,16 @@ import { LoopPattern } from "./mobLogic";
 import { makeAutoObservable, makeObservable, observable, action } from "mobx";
 import { EFFECT_ACTIONS } from "../engine/cardEffects";
 import { CardLibrary } from "../engine/cardEffects";
+
 export class Entity {
-  constructor(name, health) {
+  constructor(name, health, image) {
     this.name = name;
     this.health = health;
     this.maxHealth = health;
     this.shield = 0;
     this.intents = [];
     this.alive = true;
+    this.image = image
 
     makeObservable(this, {
       health: observable,
@@ -31,15 +33,25 @@ export class Entity {
      this.health -= amount;
     }
   }
+  modifyHealth(amount) {this.health = Math.min(this.health + amount, this.maxHealth) }
   addShield(amount) {this.shield += amount; }
   checkAlive() {if (this.health <= 0){this.alive = false;}}
+  playCard(target, card){
+    card.effects.forEach(effect => {
+        const effect_action = EFFECT_ACTIONS[effect.type];
+        if (effect_action) {
+            if (effect.target == "target"){ effect_action(target, effect.value); }
+            else { effect_action(this, effect.value); }
+        }
+    });        
+  }
 }
 
 
 
 export class Player extends Entity{
-    constructor(name, health, deck) {
-        super(name, health);
+    constructor(name, health, image, deck) {
+        super(name, health, image);
         this.deck = new Deck(deck);
         
         makeObservable(this, {
@@ -49,24 +61,18 @@ export class Player extends Entity{
         });
         this.drawCard(4);
     }
-    addGameManager(gameManager){ this.gameManager = gameManager }
-    playCard(target, idx) {
-        let card = this.deck.hand[idx]
-        card.effects.forEach(effect => {
-            const effect_action = EFFECT_ACTIONS[effect.type];
-            if (effect_action) {
-                if (effect.target == "target"){ effect_action(target, effect.value); }
-                else { effect_action(this, effect.value); }
-            }
-        });        
+    addGameManager(gameManager){ this.gameManager = gameManager; }
+    playCard(target, card, idx) {
+        super.playCard(target, card);
         this.deck.hand.splice(idx, 1);
-        this.intents.splice(0, 1)
+        this.intents.splice(0, 1);
     }
     drawCard(n){ for (let i = 0; i<n; i++) this.deck.drawCard() }
 
 }
 class Deck {
   constructor(initDeck){
+    initDeck = initDeck.map(c => CardLibrary[c])
     this.hand = [];
     this.drawn = initDeck;
     this.discard = [];
@@ -83,15 +89,14 @@ class Deck {
 
 
 export class Enemy extends Entity {
-    constructor(name, health){
-        super(name, health);
+    constructor(name, health, image){
+        super(name, health, image);
         makeObservable(this, {
             playCard: action,
             initializeIntents: action,
             consumeIntent: action
         });
     }
-    addGameManager(gameManager){ this.gameManager = gameManager }
 
     initializeIntents(possibleMoves) {
         this.intentGenerator = new LoopPattern(possibleMoves);
@@ -113,15 +118,7 @@ export class Enemy extends Entity {
         this.intents.push(newIntent);
     }
     playCard(target, card){
-        if (target == "player"){ target  = this.gameManager.player }
-        if (target == "self"){ target = this}
-        CardLibrary[card].effects.forEach(effect => {
-            const effect_action = EFFECT_ACTIONS[effect.type];
-            if (effect_action) {
-                if (effect.target == "target"){ effect_action(target, effect.value); }
-                if (effect.target == "self"){ effect_action(target, effect.value); }
-            }
-        });        
+        super.playCard(target, CardLibrary[card]);
         this.consumeIntent()
     }
 
