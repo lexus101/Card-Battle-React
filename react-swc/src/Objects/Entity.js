@@ -8,19 +8,23 @@ export class Entity {
     this.health = health;
     this.maxHealth = health;
     this.shield = 0;
-    this.intents = []
+    this.intents = [];
+    this.alive = true;
 
     makeObservable(this, {
       health: observable,
       shield: observable,
       intents: observable,
+      alive: observable,
       takeDamage: action,
       addShield: action,
+      checkAlive: action,
     });
 
   }
   takeDamage(amount) { this.health -= amount; }
   addShield(amount) {this.shield += amount; }
+  checkAlive() {if (this.health <= 0){this.alive = false;}}
 }
 
 

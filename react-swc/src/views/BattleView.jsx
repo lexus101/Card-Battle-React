@@ -29,9 +29,10 @@ const EnemyUnit = observer(({ onPress, enemy }) => {
 
 
 export const BattleView = observer(() => {
-  const player = useGameStore(s => s.player);
-  const enemies = useGameStore(s => s.enemies[0]);
   const gameManager = useGameStore(s => s.gameManager);
+  const player = useGameStore(s => s.player);
+  const enemies = useGameStore(s => s.enemies);
+  const current_enemies = enemies[gameManager.enemies_index]
 
   const [selectedCardIdx, setSelectedCardIdx] = useState(null);
   const [currentTurn, setCurrentTurn] = useState(1); // Example turn state
@@ -66,7 +67,7 @@ export const BattleView = observer(() => {
 
       {/* Enemies Row - each enemy now in a wrapper with intents on side */}
       <div className='enemy-row-wrapper'>
-        {enemies.map((enemy, idx) => (
+        {current_enemies.map((enemy, idx) => (
           <div key={idx} className='enemy-wrapper'>
             <EnemyUnit onPress={() => handleTargetSelect(enemy)} enemy={enemy} />
             {/* Intents moved outside card, to the side */}
