@@ -22,7 +22,15 @@ export class Entity {
     });
 
   }
-  takeDamage(amount) { this.health -= amount; }
+  takeDamage(amount) {
+    if (this.shield >= amount){
+     this.shield -= amount;
+    } else{
+     amount -= this.shield;
+     this.shield = 0;
+     this.health -= amount;
+    }
+  }
   addShield(amount) {this.shield += amount; }
   checkAlive() {if (this.health <= 0){this.alive = false;}}
 }
