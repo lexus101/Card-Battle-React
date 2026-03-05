@@ -6,12 +6,12 @@ import { createEnemy } from '../engine/enemyRegistry';
 
 const player = new Player('player', 20, null, [
   "STRIKE", 
-  "STRIKE", 
+  "QUICK_STRIKE", 
   "DOUBLE_STRIKE",
   "HEAVY_STRIKE",
   "FIVEFOLD_STRIKE",
   "DEFEND",
-  "QUICK_STEP",
+  "RUSH",
   "PATCH_UP",
   "FOCUS"
 ])
