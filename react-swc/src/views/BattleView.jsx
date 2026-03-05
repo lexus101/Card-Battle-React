@@ -131,7 +131,10 @@ export const BattleView = observer(() => {
 
 
   return (
-    <div className='battleContainer'>
+    <div
+      className='battleContainer'
+      onClick={() => setSelectedCardIdx(null)}
+    >
       {/* Top Bar: Synergy (left) and Turn (center) */}
       <div className='top-bar'>
         <div className='synergy'>
@@ -205,9 +208,13 @@ export const BattleView = observer(() => {
              
           <button
               key={idx}
-              onClick={() => {
-                if (refreshMode) toggleRefreshPick(idx);
-                else setSelectedCardIdx(idx);
+              onClick={(e) => {
+                e.stopPropagation();
+                if (refreshMode) {
+                  toggleRefreshPick(idx);
+                } else {
+                  setSelectedCardIdx(prev => (prev === idx ? null : idx));
+                }
               }}
               className={`card card--fullart
                 ${idx === selectedCardIdx ? 'selectedCard' : ''}
