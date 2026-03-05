@@ -13,9 +13,15 @@ const player = new Player('player', 20, null, [
   "DEFEND",
   "RUSH",
   "PATCH_UP",
-  "FOCUS"
-
+  "FOCUS",
+  "CHARGE",
+  "ICE_SHARD",
+  "LIGHTNING_STRIKE",
+  "WATER_FLOW",
+  "FIREBALL"
 ])
+
+
 
 const g1 = createEnemy('GOBLIN')
 const g2 = createEnemy('GOBLIN')

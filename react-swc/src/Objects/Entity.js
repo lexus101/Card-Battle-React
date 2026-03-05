@@ -12,8 +12,16 @@ export class Entity {
     this.intents = [];
     this.alive = true;
     this.image = image
+    this.onFire = 0;
+    this.onWet = 0;
+    this.onElec = 0;
+    this.charge = 0;
+    this.isFrozen = false;
+    this.chargeConsumed = false;
 
     makeObservable(this, {
+      onFire: observable,
+      charge: observable,
       health: observable,
       shield: observable,
       intents: observable,
@@ -22,9 +30,14 @@ export class Entity {
       addShield: action,
       checkAlive: action,
     });
-
   }
-  takeDamage(amount) {
+  applyfire(amount){
+    this.onFire += amount
+  }
+  takeDamage(amount, type) {
+    if (type=="fire") {amount += this.onFire; }
+    if (type=="elec") {amount += this.onWet}
+
     if (this.shield >= amount){
      this.shield -= amount;
     } else{
@@ -32,19 +45,33 @@ export class Entity {
      this.shield = 0;
      this.health -= amount;
     }
+
+    this.checkAlive()
   }
   modifyHealth(amount) {this.health = Math.min(this.health + amount, this.maxHealth) }
   addShield(amount) {this.shield += amount; }
   checkAlive() {if (this.health <= 0){this.alive = false;}}
   playCard(target, card){
+    console.log(this, this.isFrozen)
     card.effects.forEach(effect => {
+        this.effectModifier(effect);
         const effect_action = EFFECT_ACTIONS[effect.type];
         if (effect_action) {
             if (effect.target == "target"){ effect_action(target, effect.value); }
             else { effect_action(this, effect.value); }
         }
-    });        
+    });
+    if (this.chargeConsumed) {this.charge = 0;}
+    this.isFrozen = false;  
   }
+  effectModifier(effect){
+    if (this.isFrozen == true){ effect.type = "NULL" }
+    if (effect.type == "DAMAGE"){ 
+      effect.value += this.charge
+      this.chargeConsumed = true;
+    }
+  }
+
 }
 
 
