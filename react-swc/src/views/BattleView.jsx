@@ -61,6 +61,40 @@ const StatusMarks = observer(({ unit, className = "" }) => {
   );
 });
 
+//Deck info
+function PileSection({ title, cards }) {
+  const grouped = groupCards(cards).sort((a, b) =>
+    a.card.name.localeCompare(b.card.name)
+  );
+
+  return (
+    <div className="pileSection">
+      <div className="pileSection__header">
+        {title} ({cards.length})
+      </div>
+
+      <div className="pileSection__list">
+        {grouped.length > 0 ? (
+          grouped.map(({ card, count }, i) => (
+            <div key={`${card.id}-${i}`} className="pileCardRow">
+              <img src={card.image} alt={card.name} className="pileCardIcon" />
+
+              <div className="pileCardInfo">
+                <div className="pileCardName">{card.name}</div>
+                <div className="pileCardDesc">{card.description || "No description"}</div>
+              </div>
+
+              {count > 1 && <div className="pileCardCount">x{count}</div>}
+            </div>
+          ))
+        ) : (
+          <div className="pileEmpty">Empty</div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 
 //Shows the card's in stacks
 function groupCards(cards) {
@@ -141,7 +175,7 @@ export const BattleView = observer(() => {
     gameManager.progressTime(2);
   };
   
-const [pendingPlay, setPendingPlay] = useState(null);
+const [deckOpen, setDeckOpen] = useState(false);
 
   // For Refresh hand and selectable discard in the future
   const [refreshMode, setRefreshMode] = useState(false);
@@ -214,7 +248,15 @@ const [pendingPlay, setPendingPlay] = useState(null);
       <div className='footerRow'>
           {/* Left Section: Deck above, then Player + Refresh side by side */}
           <div className='player-area'>
-            <button className='clickable deck-button'>Deck</button>
+            <button
+              className='clickable deck-button'
+              onClick={(e) => {
+                e.stopPropagation();
+                setDeckOpen(true);
+              }}
+             >
+              Deck
+            </button>
             <div className='player-row'>
              <div className="playerWrap" onClick={() => handleTargetSelect(player)}>
                 <StatusMarks unit={player} className="statusMarks--player" />
@@ -331,6 +373,34 @@ const [pendingPlay, setPendingPlay] = useState(null);
             </div>
           </div>
       </div>
+  
+      {deckOpen && (
+        <div
+          className="deckModalOverlay"
+          onClick={() => setDeckOpen(false)}
+        >
+          <div
+            className="deckModal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="deckModal__top">
+              <div className="deckModal__title">Deck Viewer</div>
+              <button
+                className="deckModal__close clickable"
+                onClick={() => setDeckOpen(false)}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="deckModal__content">
+              <PileSection title="Draw Pile" cards={player.deck.drawPile} />
+              <PileSection title="Discard Pile" cards={player.deck.discardPile} />
+            </div>
+          </div>
+        </div>
+      )}
+
   </div>
   );
 });

@@ -119,7 +119,7 @@
    "FIREBALL": {
     "id": "FIREBALL",
     "name": "Fireball",
-    "description":"Deal 5 dmg. Activate Burn. Apply Burn x2.",
+    "description":"Deal 5 dmg. Apply Burn x2.",
     "image": "/Card/Fireball.png",
     "time_cost": 1,
     "effects": [
@@ -131,6 +131,7 @@
   "WATER_FLOW": {
     "image": "/Card/Water_Flow.png",
     "name": "Water Flow",
+    "description":"Deal 5 water dmg. Apply Wet x1.",
     "time_cost": 1,
     "effects": [
       { "type": "DAMAGE_WATER", "value": 5, "target": "target" },
@@ -140,7 +141,7 @@
   "LIGHTNING_STRIKE": {
     "id": "LIGHTNING_STRIKE",
     "name": "Lightning Strike",
-    "description":"Deal 5 dmg. Deal more damage to enemies that are wet",
+    "description":"Deal 5 electric dmg. Deal more damage to wet enemies.",
     "image": "/Card/Lightning_Strike.png",
     "time_cost": 1,
     "effects": [
@@ -150,7 +151,7 @@
   "ICE_SHARD": {
     "id": "ICE_SHARD",
     "name": "Ice Shard",
-    "description":"Deal 3 dmg and freeze target",
+    "description":"Deal 3 dmg. Apply Freeze x1.",
     "image": "/Card/Ice_Shard.png",
     "time_cost": 1,
     "effects": [
@@ -161,7 +162,7 @@
   "CHARGE": {
   "id": "CHARGE",
   "name": "Charge",
-  "description":"Deal 3 dmg to target",
+  "description":"Apply Charge x3.",
   "image": "/Card/Charge.png",
   "time_cost": 0,
   "effects": [
@@ -171,11 +172,12 @@
     "BLOOD_DRAIN": {
     "id": "BLOOD_DRAIN",
     "name": "Blood Drain",
-    "description":"Deal 3 dmg to target",
+    "description":"Deal 7 dmg to target",
     "image": "/Card/Blood_Drain.png",
-    "time_cost": 0,
+    "time_cost": 1,
     "effects": [
-      { "type": "DAMAGE", "value": 3, "target": "target" }
+      { "type": "DAMAGE", "value": 7, "target": "target" },
+      { "type": "HEAL", "value": 7, "target": "self" }
     ]
   }
 }
