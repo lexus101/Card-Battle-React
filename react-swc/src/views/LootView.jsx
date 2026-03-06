@@ -1,22 +1,32 @@
-import { motion, useAnimation } from "framer-motion";
+import React from "react";
+import { observer } from "mobx-react";
+import "./LootView.css";
 
-export const PlayAnimation = (props) => {
-  const controls = useAnimation();
-
-  const startAnimation = async () => {
-    // You can define a sequence of animations here
-    await controls.start({ x: props.x, y:props.y, opacity: 1 });
-  };
-
+export const LootView = observer(({ loot, onPick, onSkip }) => {
   return (
-    <div>
-      <button onClick={startAnimation}>Replay Animation</button>
-      <motion.img
-        src="/Card/Water_Flow.png"
-        animate={controls}
-        initial={{ x: 0, y:0, opacity: 0.5 }}
-        style={{ width: 50, height: 50, background: 'blue' }}
-      />
+    <div className="lootOverlay">
+      <div className="lootPanel">
+        <div className="lootTitle">Choose a Reward</div>
+        <div className="lootSubtitle">Pick 1 card to add to your deck</div>
+
+        <div className="lootCards">
+          {loot.map((card, i) => (
+            <button
+              key={i}
+              className="lootCard"
+              onClick={() => onPick(card)}
+            >
+              <img src={card.image} alt={card.name} className="lootArt" />
+              <div className="lootName">{card.name}</div>
+              <div className="lootDesc">{card.description || "No description"}</div>
+            </button>
+          ))}
+        </div>
+
+        <button className="lootSkip" onClick={onSkip}>
+          Skip
+        </button>
+      </div>
     </div>
   );
-};
+});

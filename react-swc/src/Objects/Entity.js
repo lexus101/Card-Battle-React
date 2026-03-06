@@ -20,15 +20,18 @@ export class Entity {
     this.chargeConsumed = false;
 
     makeObservable(this, {
-      onFire: observable,
-      charge: observable,
-      health: observable,
-      shield: observable,
-      intents: observable,
-      alive: observable,
-      takeDamage: action,
-      addShield: action,
-      checkAlive: action,
+    onFire: observable,
+    onWet: observable,
+    onElec: observable,
+    charge: observable,
+    isFrozen: observable,
+    health: observable,
+    shield: observable,
+    intents: observable,
+    alive: observable,
+    takeDamage: action,
+    addShield: action,
+    checkAlive: action,
     });
   }
   applyfire(amount){
