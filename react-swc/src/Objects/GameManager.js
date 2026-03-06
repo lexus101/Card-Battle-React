@@ -1,6 +1,8 @@
 import { makeAutoObservable } from "mobx";
 import { CardLibrary } from "../engine/cardEffects";
 
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 
 
 function buildRewardPools() {
