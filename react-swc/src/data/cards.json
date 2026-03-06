@@ -8,7 +8,7 @@
     "image": "/Card/Strike.png",
     "time_cost": 1,
     "effects": [
-      { "type": "DAMAGE", "value": 2, "target": "target" }
+      { "type": "DAMAGE", "value": 1, "target": "target" }
     ]
   },
   "STRIKE": {
@@ -206,7 +206,7 @@
     "name": "Blood Drain",
     "rarity": "rare",
     "rewardable": true,
-    "description":"Deal 7 dmg to target",
+    "description":"Deal 7 dmg to target. Heal 7.",
     "image": "/Card/Blood_Drain.png",
     "time_cost": 1,
     "effects": [
