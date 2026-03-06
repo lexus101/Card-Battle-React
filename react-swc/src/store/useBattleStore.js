@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Player } from '../Objects/Entity';
+import { Player,Enemy } from '../Objects/Entity';
 import { GameManager } from '../Objects/GameManager';
 import { createEnemy } from '../engine/enemyRegistry';
 

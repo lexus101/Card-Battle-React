@@ -1,19 +1,79 @@
 import { makeAutoObservable } from "mobx";
 import { CardLibrary } from "../engine/cardEffects";
 
-function getLootChoicesForWave(waveIndex) {
-  const lootPools = [
-    ["STRIKE", "DEFEND", "PATCH_UP"],
-    ["FIREBALL", "WATER_FLOW", "LIGHTNING_STRIKE"],
-    ["ICE_SHARD", "CHARGE", "FOCUS"],
-  ];
 
-  const ids = lootPools[waveIndex] || ["STRIKE", "DEFEND", "PATCH_UP"];
 
-  return ids
-    .map((id) => CardLibrary[id])
-    .filter(Boolean)
-    .map((card) => ({ ...card }));
+function buildRewardPools() {
+  const pools = {
+    common: [],
+    uncommon: [],
+    rare: [],
+  };
+
+  Object.entries(CardLibrary).forEach(([id, card]) => {
+    if (!card.rewardable) return;
+
+    const rarity = card.rarity || "common";
+
+    if (!pools[rarity]) {
+      pools[rarity] = [];
+    }
+
+    pools[rarity].push(id);
+  });
+
+  return pools;
+}
+
+const REWARD_POOLS = buildRewardPools();
+
+function randomFrom(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
+function rollRarityForWave(waveIndex) {
+  const r = Math.random();
+
+  //for waves if needed later
+  //if (waveIndex === 0) {
+   // if (r < 0.8) return "common";
+  //  if (r < 0.97) return "uncommon";
+   // return "rare";
+ // }
+
+  if (r < 0.5) return "common";
+  if (r < 0.8) return "uncommon";
+  return "rare";
+
+
+}
+
+function getRandomLootChoices(waveIndex, count = 3) {
+  const chosenIds = new Set();
+  const rewards = [];
+    
+  let safety = 0;
+  while (rewards.length < count && safety < 100) {
+    safety++;
+
+    const rarity = rollRarityForWave(waveIndex);
+    const pool = REWARD_POOLS[rarity] || [];
+    if (pool.length === 0) continue;
+
+    const id = randomFrom(pool);
+    if (chosenIds.has(id)) continue;
+
+    const card = CardLibrary[id];
+    if (!card) continue;
+
+    chosenIds.add(id);
+    rewards.push({
+      ...card,
+      rewardRarity: rarity,
+    });
+  }
+
+  return rewards;
 }
 
 export class GameManager {
@@ -53,7 +113,6 @@ export class GameManager {
     const pi = this.player.intents?.[0];
     if (pi && pi.time <= this.time) {
       this.player.playCard(pi.target, this.player.deck.hand[pi.card_idx], pi.card_idx);
-      this.player.intents.shift();
     }
 
     this.currentEnemies.forEach((e) => {
@@ -64,7 +123,6 @@ export class GameManager {
 
       if (ei && ei.time <= this.time) {
         e.playCard(matchTarget[ei.target], ei.card);
-        e.intents.shift();
       }
     });
   }
@@ -93,7 +151,7 @@ export class GameManager {
       return;
     }
 
-    this.pendingLoot = getLootChoicesForWave(this.enemies_index);
+    this.pendingLoot = getRandomLootChoices(this.enemies_index, 3);
     this.lootOpen = true;
   }
 
