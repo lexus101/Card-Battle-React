@@ -2,14 +2,13 @@ import { makeAutoObservable } from "mobx";
 import { CardLibrary } from "../engine/cardEffects";
 
 function getLootChoicesForWave(waveIndex) {
-  // starter version: customize later
   const lootPools = [
     ["STRIKE", "DEFEND", "PATCH_UP"],
-    ["Fireball", "Water Flow", "Thunderbolt"],
-    ["Ice Spell", "Growth", "Fire Wall"],
+    ["FIREBALL", "WATER_FLOW", "LIGHTNING_STRIKE"],
+    ["ICE_SHARD", "CHARGE", "FOCUS"],
   ];
 
-  const ids = lootPools[waveIndex] || ["Strike", "Defend", "Patch up"];
+  const ids = lootPools[waveIndex] || ["STRIKE", "DEFEND", "PATCH_UP"];
 
   return ids
     .map((id) => CardLibrary[id])
@@ -43,7 +42,6 @@ export class GameManager {
 
     for (let i = 0; i < t + 1; i++) {
       if (i !== 0) this.time += 1;
-
       this.runIntents();
       this.updateGame();
 
@@ -58,18 +56,15 @@ export class GameManager {
       this.player.intents.shift();
     }
 
-    this.currentEnemies.forEach((enemy) => {
-      if (!enemy.alive) return;
+    this.currentEnemies.forEach((e) => {
+      if (!e.alive) return;
 
-      const ei = enemy.intents?.[0];
-      const matchTarget = {
-        player: this.player,
-        self: enemy,
-      };
+      const ei = e.intents?.[0];
+      const matchTarget = { player: this.player, self: e };
 
       if (ei && ei.time <= this.time) {
-        enemy.playCard(matchTarget[ei.target], ei.card);
-        enemy.intents.shift();
+        e.playCard(matchTarget[ei.target], ei.card);
+        e.intents.shift();
       }
     });
   }
@@ -103,10 +98,9 @@ export class GameManager {
   }
 
   claimLoot(card) {
-    if (!card) return;
-
-    // add reward to discard pile
-    this.player.deck.discardPile.push({ ...card });
+    if (card) {
+      this.player.deck.discardPile.push({ ...card });
+    }
 
     this.pendingLoot = [];
     this.lootOpen = false;

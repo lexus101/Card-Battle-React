@@ -150,7 +150,7 @@ export const BattleView = observer(() => {
   const gameManager = useGameStore(s => s.gameManager);
   const player = useGameStore(s => s.player);
   const enemies = useGameStore(s => s.enemies);
-  const current_enemies = enemies[gameManager.enemies_index]
+  const current_enemies = enemies[gameManager.enemies_index] || [];
   const lootOpen = gameManager.lootOpen;
   const pendingLoot = gameManager.pendingLoot;
   const [selectedCardIdx, setSelectedCardIdx] = useState(null);
