@@ -77,11 +77,11 @@
     "name": "Focus",
     "rarity": "common",
     "rewardable": true,
-    "description":"Draw 1.",
+    "description":"Draw 2.",
     "image": "/Card/Focus.png",
     "time_cost": 0,
     "effects": [
-      { "type": "DRAW", "value": 1, "target": "self" }
+      { "type": "DRAW", "value": 2, "target": "self" }
     ]
   },
   "VAMPIRE": {
