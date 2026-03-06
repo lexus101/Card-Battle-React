@@ -4,6 +4,8 @@ import { GameManager } from '../Objects/GameManager';
 import { createEnemy } from '../engine/enemyRegistry';
 // Define your cards with "Effect" strings or logic keys
 
+
+function buildBattleState(set) {
 const player = new Player('player', 20, null, [
  "STRIKE", 
  "STRIKE", 
@@ -39,7 +41,22 @@ const s7 = createEnemy('SKELETON')
 
 
 const enemies = [[g1, g2], [s1,s2,s3,s4,s5],[s6,v1,s7]]
+
+  const restartBattle = () => {
+    set(buildBattleState(set));
+  };
+
+
 const gameManager = new GameManager(player, enemies)
+
+  return {
+    player,
+    enemies,
+    gameManager,
+    restartBattle,
+  };
+
+}
 export const useGameStore = create((set) => ({
   // --- STATE ---
   player: player,

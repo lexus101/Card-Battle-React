@@ -4,6 +4,8 @@ import { useGameStore } from '../store/useBattleStore.js'; // Adjust path
 import './BattleView.css';
 import { observer } from "mobx-react"
 import { CardLibrary } from "../engine/cardEffects";
+import { LootView } from "./LootView";
+import { RunCompleteView } from "./RunCompleteView";
 
 function inferCategory(def) {
   if (!def) return "UTILITY";
@@ -149,10 +151,13 @@ export const BattleView = observer(() => {
   const player = useGameStore(s => s.player);
   const enemies = useGameStore(s => s.enemies);
   const current_enemies = enemies[gameManager.enemies_index]
-
+  const lootOpen = gameManager.lootOpen;
+  const pendingLoot = gameManager.pendingLoot;
   const [selectedCardIdx, setSelectedCardIdx] = useState(null);
   const [currentTurn, setCurrentTurn] = useState(1); // Example turn state
 
+
+  
   const handleTargetSelect = (target) => {
     if (selectedCardIdx !== null) {
       gameManager.intentAction(target, selectedCardIdx);
@@ -373,7 +378,7 @@ const [deckOpen, setDeckOpen] = useState(false);
             </div>
           </div>
       </div>
-  
+  {/* Deck Stuff */}
       {deckOpen && (
         <div
           className="deckModalOverlay"
@@ -400,7 +405,29 @@ const [deckOpen, setDeckOpen] = useState(false);
           </div>
         </div>
       )}
+ {/*  Loot Stuff */}
+{gameManager.lootOpen && (
+  <LootView
+    loot={gameManager.pendingLoot}
+    onPick={(card)=>gameManager.claimLoot(card)}
+    onSkip={()=>gameManager.skipLoot()}
+  />
+)}
+{gameManager.runComplete && (
+  <RunCompleteView
+    title="Run Complete"
+    buttonText="Restart Run"
+    onRestart={() => gameManager.restartRun()}
+  />
+)}
 
+{gameManager.runFailed && (
+  <RunCompleteView
+    title="You Died"
+    buttonText="Try Again"
+    onRestart={() => gameManager.restartRun()}
+  />
+)}
   </div>
   );
 });
