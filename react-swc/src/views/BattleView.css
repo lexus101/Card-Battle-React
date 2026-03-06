@@ -98,6 +98,67 @@ body {
   width: 80px; /* keep for spacing, but setting now appears after it */
 }
 
+/*Status Effect */
+
+
+.statusMarks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.statusMarks--enemy {
+  position: static;
+  margin-top: 6px;
+}
+
+.enemyUnitWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.statusMarks--player {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  z-index: 20;
+  min-width: max-content;
+}
+
+.playerWrap {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: visible;
+}
+.statusMark {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.statusMark__icon {
+  line-height: 1;
+}
+
+.statusMark__value {
+  line-height: 1;
+}
+
+
 /* Enemy Row */
 .enemy-row-wrapper {
   display: flex;
@@ -723,6 +784,7 @@ body {
 .clickable:active {
   filter: brightness(0.8);
 }
+
 
 /* Responsive adjustments (keep as before) */
 @media (max-width: 1000px) {

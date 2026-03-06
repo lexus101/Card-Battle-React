@@ -33,6 +33,35 @@ function getIntentGlyph(def) {
   return "✦";
 }
 
+//Shows the status of units and their stacks
+function getStatusList(unit) {
+  return [
+    unit.onFire > 0 && { key: "fire", icon: "🔥", label: "Burn", value: unit.onFire },
+    unit.onWet > 0 && { key: "wet", icon: "💧", label: "Wet", value: unit.onWet },
+    unit.onElec > 0 && { key: "elec", icon: "⚡", label: "Elec", value: unit.onElec },
+    unit.charge > 0 && { key: "charge", icon: "🔋", label: "Charge", value: unit.charge },
+    unit.isFrozen && { key: "frozen", icon: "❄️", label: "Frozen", value: "" },
+  ].filter(Boolean);
+}
+
+const StatusMarks = observer(({ unit, className = "" }) => {
+  const statuses = getStatusList(unit);
+
+  if (statuses.length === 0) return null;
+
+  return (
+    <div className={`statusMarks ${className}`}>
+      {statuses.map((s) => (
+        <div key={s.key} className={`statusMark statusMark--${s.key}`} title={s.label}>
+          <span className="statusMark__icon">{s.icon}</span>
+          {s.value !== "" && <span className="statusMark__value">{s.value}</span>}
+        </div>
+      ))}
+    </div>
+  );
+});
+
+
 //Shows the card's in stacks
 function groupCards(cards) {
   const map = {};
@@ -53,24 +82,28 @@ function groupCards(cards) {
   return Object.values(map);
 }
 
-
 const EnemyUnit = observer(({ onPress, enemy }) => {
   const healthPercent = (enemy.health / (enemy.maxHealth || 100)) * 100;
+
   return (
-    <div onClick={onPress} className='enemyCard'>
-      <img src={enemy.image} alt="Enemy" className='enemyImg' />
-      <div className='statsOverlay'>
-        {/* Health Bar */}
-        <div className="stat-bar health-bar">
-          <div 
-            className="bar-fill" 
-            style={{ width: `${healthPercent}%` }}
-          ></div>
-          <span className="bar-text">{enemy.health} / {enemy.maxHealth || 100}</span>
+    <div className="enemyUnitWrap" onClick={onPress}>
+      <div className='enemyCard'>
+        <img src={enemy.image} alt="Enemy" className='enemyImg' />
+        <div className='statsOverlay'>
+          <div className="stat-bar health-bar">
+            <div
+              className="bar-fill"
+              style={{ width: `${healthPercent}%` }}
+            />
+            <span className="bar-text">
+              {enemy.health} / {enemy.maxHealth || 100}
+            </span>
+          </div>
+          <p>Shield: {enemy.shield || 0}</p>
         </div>
-        {/* Shield (optional, can also be a bar) */}
-        <p>Shield: {enemy.shield || 0}</p>
       </div>
+
+      <StatusMarks unit={enemy} className="statusMarks--enemy" />
     </div>
   );
 });
@@ -107,7 +140,8 @@ export const BattleView = observer(() => {
     player.drawCard(n);
     gameManager.progressTime(2);
   };
-
+  
+const [pendingPlay, setPendingPlay] = useState(null);
 
   // For Refresh hand and selectable discard in the future
   const [refreshMode, setRefreshMode] = useState(false);
@@ -182,14 +216,22 @@ export const BattleView = observer(() => {
           <div className='player-area'>
             <button className='clickable deck-button'>Deck</button>
             <div className='player-row'>
-              <div onClick={() => handleTargetSelect(player)} className='playerSection'>
-                <img src={player.image} alt="Player" className='playerImg' />
-                <div className='statsOverlay'>
-                  <div className="stat-bar health-bar">
-                    <div className="bar-fill" style={{ width: `${(player.health / player.maxHealth) * 100}%` }}></div>
-                    <span className="bar-text">{player.health} / {player.maxHealth}</span>
+             <div className="playerWrap" onClick={() => handleTargetSelect(player)}>
+                <StatusMarks unit={player} className="statusMarks--player" />
+                <div className='playerSection'>
+                  <img src={player.image} alt="Player" className='playerImg' />
+                  <div className='statsOverlay'>
+                    <div className="stat-bar health-bar">
+                      <div
+                        className="bar-fill"
+                        style={{ width: `${(player.health / player.maxHealth) * 100}%` }}
+                      />
+                      <span className="bar-text">
+                        {player.health} / {player.maxHealth}
+                      </span>
+                    </div>
+                    <p>Shield: {player.shield}</p>
                   </div>
-                  <p>Shield: {player.shield}</p>
                 </div>
               </div>
            <button
