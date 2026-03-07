@@ -11,7 +11,6 @@ function buildBattleState(set) {
     "DEFEND",
     "FOCUS",
     "PATCH_UP"
-
   ]);
 
   const g1 = createEnemy('GOBLIN');
