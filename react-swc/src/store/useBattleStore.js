@@ -3,8 +3,8 @@ import { Player,Enemy } from '../Objects/Entity';
 import { GameManager } from '../Objects/GameManager';
 import { createEnemy } from '../engine/enemyRegistry';
 
-function buildBattleState() {
-  const player = new Player('player', 20, null, [
+function buildBattleState(set) {
+  const player = new Player('player', 100, null, [
      "STRIKE",
      "STRIKE",
      "DEFEND",
@@ -27,7 +27,7 @@ function buildBattleState() {
 
   const gameManager = new GameManager(player, [], restartBattle);
   player.addGameManager(gameManager);
-    gameManager.startBattle();
+
 
   return { gameManager };
 }

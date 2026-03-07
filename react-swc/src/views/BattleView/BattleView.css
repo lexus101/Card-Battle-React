@@ -98,6 +98,12 @@ body {
   width: 80px; /* keep for spacing, but setting now appears after it */
 }
 
+.enemy-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+}
 /*Status Effect */
 
 

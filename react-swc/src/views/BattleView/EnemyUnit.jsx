@@ -51,7 +51,9 @@ export const EnemyUnit = observer(({ onPress, enemy }) => {
               <span className="bar-text">
                 {enemy.health} / {enemy.maxHealth || 100}
               </span>
+              
             </div>
+            <div className="enemy-name">{enemy.name}</div>
             <StatusMarks unit={enemy} className="statusMarks--enemy" />
 
           </div>

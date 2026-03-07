@@ -1,13 +1,43 @@
 {
   "GOBLIN": {
     "name": "Goblin Scout",
-    "hp": 15,
+    "hp": 20,
     "pattern":[
         {"card":"STRIKE", "target":"player", "time": 1},
         {"card":"STRIKE", "target":"player", "time": 1},
         {"card":"PATCH_UP", "target":"self", "time": 1}
     ],
     "image": "./Enemy/Goblin.png"
+  },
+   "SPEAR_GOBLIN": {
+    "name": "Goblin Spear Thrower",
+    "hp": 15,
+    "pattern":[
+      {"card":"CHARGE", "target":"self", "time": 0},
+        {"card":"DOUBLE_STRIKE", "target":"player", "time": 1},
+        {"card":"STRIKE", "target":"player", "time": 1}
+    ],
+    "image": "./Enemy/Spear_Goblin.png"
+  },
+   "STRONG_GOBLIN": {
+    "name": "Strong Goblin",
+    "hp": 40,
+    "pattern":[
+        {"card":"STRIKE", "target":"player", "time": 1},
+        {"card":"HEAVY_STRIKE", "target":"player", "time": 2},
+        {"card":"PATCH_UP", "target":"self", "time": 1}
+    ],
+    "image": "./Enemy/Strong_Goblin.png"
+  },
+   "GOBLIN_SOLDIER": {
+    "name": "Goblin Soldier",
+    "hp": 25,
+    "pattern":[
+        {"card":"DEFEND", "target":"player", "time": 0},
+        {"card":"STRIKE", "target":"player", "time": 1},
+        {"card":"DOUBLE_STRIKE", "target":"self", "time": 1}
+    ],
+    "image": "./Enemy/Goblin_Soldier.png"
   },
   "SKELETON":{
     "name": "Skeleton",

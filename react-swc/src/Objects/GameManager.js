@@ -160,21 +160,57 @@ runEnemyTurn() {
     if (!e.alive) return;
     if (!e.intents || e.intents.length === 0) return;
 
-    const intent = e.intents[0];
     const matchTarget = {
       player: this.player,
       self: e,
     };
 
-    if (intent.time > 1) {
-      intent.time -= 1;
-      return;
+    let safety = 10; // 防止死循环
+    let chainMode = false;
+
+    while (e.alive && e.intents.length > 0 && safety > 0) {
+      safety--;
+
+      const intent = e.intents[0];
+      if (!intent) break;
+
+      // 先头是 1：正常放一招，然后结束
+      if (!chainMode && intent.time === 1) {
+        const target = matchTarget[intent.target];
+        if (!target) break;
+
+        e.playCard(target, intent.card);
+        break;
+      }
+
+      // 先头是 0：进入连锁模式
+      if (intent.time === 0) {
+        chainMode = true;
+
+        const target = matchTarget[intent.target];
+        if (!target) break;
+
+        e.playCard(target, intent.card);
+        continue;
+      }
+
+      // 连锁模式中遇到 1：放掉并结束
+      if (chainMode && intent.time === 1) {
+        const target = matchTarget[intent.target];
+        if (!target) break;
+
+        e.playCard(target, intent.card);
+        break;
+      }
+
+      // 遇到大于1：不放，只减1，然后结束
+      if (intent.time > 1) {
+        intent.time -= 1;
+        break;
+      }
+
+      break;
     }
-
-    const target = matchTarget[intent.target];
-    if (!target) return;
-
-    e.playCard(target, intent.card);
   });
 }
 
