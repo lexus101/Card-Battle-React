@@ -1,6 +1,6 @@
 import { observer } from "mobx-react"
 import { DeckView } from "./DeckView"
-
+import { StatusMarks } from "./StatusMarks";
 
 
 export const PlayerUnit = ({ onPress, player, gameManager }) => {
@@ -22,7 +22,6 @@ export const PlayerUnit = ({ onPress, player, gameManager }) => {
         <div className='player-area'>
             <div className='player-row'>
                 <div className="playerWrap" onClick={onPress}>
-                    {/* <StatusMarks unit={player} className="statusMarks--player" /> */}
                     <div className='playerSection'>
                         <img src={player.image} alt="Player" className='playerImg' />
                         <div className='statsOverlay'>
@@ -35,6 +34,8 @@ export const PlayerUnit = ({ onPress, player, gameManager }) => {
                                 {player.health} / {player.maxHealth}
                             </span>
                             </div>
+                            <StatusMarks unit={player} className="statusMarks--player" />
+
                         </div>
                     </div>
                 </div>

@@ -15,8 +15,8 @@ import { HandCardView } from './HandCardView.jsx';
 
 export const BattleView = observer(() => {
   const gameManager = useGameStore(s => s.gameManager);
-  const player = useGameStore(s => s.player);
-  const enemies = useGameStore(s => s.enemies);
+  const player = gameManager.player
+  const enemies = gameManager.enemies
   const current_enemies = enemies[gameManager.enemies_index] || [];
   const [selectedCardIdx, setSelectedCardIdx] = useState(null);
 
@@ -76,7 +76,8 @@ export const BattleView = observer(() => {
 
       {/*  Game State Managing */}
       {gameManager.lootOpen && ( <LootView loot={gameManager.pendingLoot} onPick={(card)=>gameManager.claimLoot(card)} onSkip={()=>gameManager.skipLoot()} />)}
-      {gameManager.runComplete && ( <RunCompleteView title="Run Complete" buttonText="Restart Run" onRestart={() => gameManager.restartRun()} />)}
+      {/* {gameManager.runComplete && ( <RunCompleteView title="Run Complete" buttonText="Restart Run" onRestart={() => gameManager.restartRun()} />)} */}
+      {gameManager.runComplete && ( <RunCompleteView title="Run Complete" buttonText="Next Level" onRestart={() => gameManager.nextLevel()} />)}
       {gameManager.runFailed && ( <RunCompleteView title="You Died" buttonText="Try Again" onRestart={() => gameManager.restartRun()}/>)}
   </div>
   );

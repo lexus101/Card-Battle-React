@@ -89,6 +89,7 @@ export class GameManager {
     this.pendingLoot = [];
     this.runComplete = false;
     this.runFailed = false;
+    this.current_view = "chapter-view"
 
     this.restartCallback = restartCallback;
 
@@ -198,5 +199,11 @@ export class GameManager {
     if (this.restartCallback) {
       this.restartCallback();
     }
+  }
+
+
+  nextLevel(){
+    this.current_view = "chapter-view";
+    this.runComplete = false;
   }
 }

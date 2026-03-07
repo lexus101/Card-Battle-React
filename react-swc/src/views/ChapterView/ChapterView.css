@@ -1,0 +1,158 @@
+.chapter-view {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.map-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.dungeon-map {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    user-select: none;
+    pointer-events: none; /* Prevents image from interfering with button clicks */
+}
+
+.level-button {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    padding: 12px 24px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: 2px solid #ffd700;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    pointer-events: auto; /* Ensures buttons remain clickable */
+}
+
+/* Button hover effects */
+.level-button:hover {
+    background: rgba(255, 215, 0, 0.8);
+    color: black;
+    transform: translate(-50%, -50%) scale(1.1);
+    border-color: white;
+    box-shadow: 0 4px 16px rgba(255, 215, 0, 0.4);
+}
+
+/* Button active/pressed state */
+.level-button:active {
+    transform: translate(-50%, -50%) scale(0.95);
+}
+
+/* Individual button styling (optional - for different level types) */
+.level-button.bat-cave {
+    border-color: #4a4a4a;
+    background: rgba(40, 40, 40, 0.8);
+}
+
+.level-button.goblin-huts {
+    border-color: #2e7d32;
+    background: rgba(30, 70, 30, 0.8);
+}
+
+.level-button.dragon-lair {
+    border-color: #c62828;
+    background: rgba(120, 30, 30, 0.8);
+}
+
+.level-button.treasure-room {
+    border-color: #ffd700;
+    background: rgba(80, 60, 20, 0.8);
+}
+
+.level-button.secret-passage {
+    border-color: #7b1fa2;
+    background: rgba(60, 20, 80, 0.8);
+}
+
+/* Responsive adjustments for very small screens */
+@media screen and (max-width: 768px) {
+    .level-button {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .level-button {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+}
+
+/* Optional: Add a pulse animation for the buttons */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 215, 0, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+    }
+}
+
+/* Add this class to buttons you want to pulse (e.g., main levels) */
+.level-button.pulse {
+    animation: pulse 2s infinite;
+}
+
+/* Optional: Tooltip-style info for buttons */
+.level-button::after {
+    content: attr(data-info);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    margin-bottom: 8px;
+}
+
+.level-button:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Accessibility focus styles */
+.level-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.5);
+}
+
+/* Optional: Add a subtle overlay to the map for better button visibility */
+.map-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.1) 100%);
+    pointer-events: none;
+    z-index: 5;
+}

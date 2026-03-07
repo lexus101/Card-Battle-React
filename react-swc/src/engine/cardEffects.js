@@ -1,6 +1,7 @@
 // data/cardLibrary.js
-import cards from "../data/cards.json"
-export const CardLibrary = cards
+const response = await fetch('./Data/cards.json')
+export const CardLibrary = await response.json()
+console.log(CardLibrary)
 
 
 export const EFFECT_ACTIONS = {
