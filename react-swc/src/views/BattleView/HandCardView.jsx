@@ -1,9 +1,11 @@
 
 export const HandCardView = ({ onPress, player, card, card_idx, selectedCardIdx}) => {
-
+    const cost = card.energy_cost ?? 1;
+    const canPlay = (player.gameManager?.energy ?? 0) >= cost;
     return(
-        <button onClick={(e) => {e.stopPropagation(); onPress(); }}
-        className={`card card--fullart ${card_idx === selectedCardIdx ? 'selectedCard' : ''}`}
+        <button  onClick={(e) => {
+        e.stopPropagation(); if (canPlay) onPress(); }}
+        className={`card card--fullart ${card_idx === selectedCardIdx ? 'selectedCard' : ''} ${!canPlay ? 'card--disabled' : ''}`}
         style={{ "--i": card_idx, "--n": player.deck.hand.length }} >
 
             {/* Full-card art */}
