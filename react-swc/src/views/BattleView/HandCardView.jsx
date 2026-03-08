@@ -1,4 +1,4 @@
-import "../CardUI.css";
+import "./css/CardUI.css";
 
 export const HandCardView = ({ onPress, player, card, card_idx, selectedCardIdx }) => {
     

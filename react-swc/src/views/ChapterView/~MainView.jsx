@@ -30,6 +30,8 @@ export const ChapterView = observer(() => {
         { id: 'goblin-huts', name: 'Goblin Huts', x: 50, y: 50 }, // Changed to percentages (was 500,200)
         { id: 'monster-tunnel', name: 'Monster Tunnel', x: 90, y: 47 },
         { id: 'secret-passage', name: 'Secret Passage', x: 55, y: 17 },
+        { id: 'dragon-den', name: "DRAGON's DEN", x: 80, y: 80 },
+
     ];
 
 

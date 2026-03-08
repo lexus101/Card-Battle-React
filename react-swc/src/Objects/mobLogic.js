@@ -27,12 +27,14 @@ export class LoopPattern extends IntentPattern {
   }
 }
 
-class RandomPattern extends IntentPattern {
-  generateNext(lastTime) {
-    const nextDelta = Math.floor(Math.random() * 3) + 2; // Time cost 2-4
-    return { 
-      card: 'RandomAttack', 
-      time: lastTime + nextDelta 
-    };
+export class RandomPattern extends IntentPattern {
+  constructor(moves){
+    super()
+    this.moves = moves;
+    this.r = moves.length;
+  }
+  generateNext() {
+    const next_intent = this.moves[Math.floor(Math.random()*this.r)]
+    return next_intent
   }
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
-import "./LootView.css";
-import "./CardUI.css";
+import "./css/LootView.css";
+import "./css/CardUI.css";
 
 export const LootView = observer(({ loot, onPick, onSkip }) => {
   return (

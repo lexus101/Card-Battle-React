@@ -220,7 +220,7 @@ export class Enemy extends Entity {
         });
     }
 
-    initializeIntents(possibleMoves) {
+    initializeIntents(possibleMoves, pattern_type) {
         // this.possibleMoves = (possibleMoves || []).map(move => ({ ...move }));
         // this.moveIndex = 0;
         // this.intents = [];
@@ -233,7 +233,7 @@ export class Enemy extends Entity {
         //     }
         // }
 
-        this.intentGenerator = new LoopPattern(possibleMoves);
+        this.intentGenerator = new pattern_type(possibleMoves);
         makeObservable(this, {intentGenerator: observable})
         // Pre-fill the window with 3 items
         this.intents = this.intentGenerator.generateNext();

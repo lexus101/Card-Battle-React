@@ -70,22 +70,6 @@
     ],
     "image": "./Enemy/Elite_Skeleton.png"
   },
-  "BANDIT": {
-    "name": "Bandit",
-    "hp": 15,
-    "pattern":[
-        {"card":"STRIKE", "target":"player", "time": 2},
-        {"card":"DEFEND", "target":"player", "time": 2},
-        {"card":"PATCH_UP", "target":"self", "time": 1}
-    ]
-  },
-  "SLIME":{
-    "name": "Slime",
-    "hp": 20,
-    "pattern":[
-        {"card":"STRIKE", "target":"player", "time": 2}
-    ]
-  },
   "VAMPIRE_BAT": {
     "name": "Vampire Bat",
     "hp": 30,
@@ -95,5 +79,18 @@
         {"card":"VAMPIRE", "target":"player", "time": 1}
     ],
     "image": "./Enemy/Bat.png"
+  },
+  "DUNGEON_DRAGON": {
+    "name": "The Old Dragon",
+    "hp": 100,
+    "pattern_type": "Random",
+    "pattern":[
+        [ {"card":"KINDLE", "target":"player"}, {"card":"FIREBALL", "target":"player"} ],
+        [ {"card":"GUARD", "target":"self"}, {"card":"PATCH_UP", "target":"self"}, {"card":"PATCH_UP", "target":"self"} ],
+        [ {"card":"QUICK_STRIKE", "target":"player"}, {"card":"QUICK_STRIKE", "target":"player"} ],
+        [ {"card":"REST", "target":"self"} ],
+        [ {"card":"PYRO_PUNCH", "target":"player"}, {"card":"PYRO_PUNCH", "target":"player"} ]
+    ],
+    "image": "./Enemy/Spear_Goblin.png"
   }
 }

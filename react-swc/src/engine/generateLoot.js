@@ -24,7 +24,6 @@ function buildRewardPools() {
   return pools;
 }
 
-const REWARD_POOLS = buildRewardPools();
 
 function randomFrom(array) {
   return array[Math.floor(Math.random() * array.length)];
@@ -43,13 +42,14 @@ function rollRarityForWave(waveIndex) {
 export function getRandomLootChoices(waveIndex, count = 3) {
   const chosenIds = new Set();
   const rewards = [];
+  const rewardPool = buildRewardPools();
 
   let safety = 0;
   while (rewards.length < count && safety < 100) {
     safety++;
 
     const rarity = rollRarityForWave(waveIndex);
-    const pool = REWARD_POOLS[rarity] || [];
+    const pool = rewardPool[rarity] || [];
     if (pool.length === 0) continue;
 
     const id = randomFrom(pool);

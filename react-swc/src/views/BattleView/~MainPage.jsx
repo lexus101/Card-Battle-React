@@ -1,11 +1,11 @@
-import './BattleView.css';
+import './css/BattleView.css';
 
 import { useState } from 'react';
 import { observer } from "mobx-react"
 
 import { useGameStore } from '../../store/useBattleStore.js'; // Adjust path
-import { LootView } from "../LootView.jsx";
-import { RunCompleteView } from "../RunCompleteView.jsx";
+import { LootView } from "./LootView.jsx";
+import { RunCompleteView } from "./RunCompleteView.jsx";
 import { EnemyUnit } from './EnemyUnit.jsx';
 import { PlayerUnit } from './PlayerUnit.jsx';
 import { HandCardView } from './HandCardView.jsx';

@@ -1,5 +1,5 @@
 import React from "react";
-import "./RunCompleteView.css";
+import "./css/RunCompleteView.css";
 
 export function RunCompleteView({ title = "Run Complete", buttonText = "Restart Run", onRestart }) {
   return (

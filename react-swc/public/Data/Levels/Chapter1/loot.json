@@ -1,14 +1,4 @@
 {
-  "REST":{
-    "id": "REST",
-    "name": "Rest",
-    "rarity": "common",
-    "rewardable": false,
-    "description":"Rest for 1 turn",
-    "image": "./Card/Focus.png",
-    "energy_cost": 1,
-    "effects": []
-  },
   "WEAK_STRIKE": {
     "id": "WEAK_STRIKE",
     "name": "Weak Strike",
@@ -21,7 +11,7 @@
       { "type": "DAMAGE", "value": 1, "target": "target" }
     ]
   },
-  "GUARD": {
+    "GUARD": {
     "id": "GUARD",
     "name": "Guard",
     "rarity": "uncommon",
@@ -111,7 +101,7 @@
     "rarity": "common",
     "rewardable": false,
     "description":"Deal 3 damage. Heal 3",
-    "image": "./Card/Blood_Drain.png",
+    "image": "",
     "energy_cost": 1,
     "effects": [
       { "type": "DAMAGE", "value": 3, "target": "target" },
@@ -291,45 +281,6 @@
     "effects": [
       { "type": "SHIELD", "value": 8, "target": "target" }
 
-    ]
-  },
-
-
-  "WATER_FLOW": {
-    "image": "./Card/Water_Flow.png",
-    "name": "Water Flow",
-    "rarity": "common",
-    "rewardable": true,
-    "description":"Deal 5 water dmg. Apply Wet x1.",
-    "energy_cost": 1,
-    "effects": [
-      { "type": "DAMAGE_WATER", "value": 5, "target": "target" },
-      { "type": "APPLY_WET", "value": 2, "target": "target" }
-    ]
-  },
-  "LIGHTNING_STRIKE": {
-    "id": "LIGHTNING_STRIKE",
-    "name": "Lightning Strike",
-    "rarity": "common",
-    "rewardable": true,
-    "description":"Deal 5 electric dmg. Deal more damage to wet enemies.",
-    "image": "./Card/Lightning_Strike.png",
-    "energy_cost": 1,
-    "effects": [
-      { "type": "DAMAGE_ELEC", "value": 5, "target": "target" }
-    ]
-  },
-  "ICE_SHARD": {
-    "id": "ICE_SHARD",
-    "name": "Ice Shard",
-    "rarity": "uncommon",
-    "rewardable": true,
-    "description":"Deal 3 dmg. Apply Freeze x1.",
-    "image": "./Card/Ice_Shard.png",
-    "energy_cost": 1,
-    "effects": [
-      { "type": "FREEZE", "value": 0, "target": "target" },
-      { "type": "DAMAGE", "value": 3, "target": "target" }
     ]
   },
   "CHARGE": {
