@@ -46,6 +46,7 @@
   border: 2px solid #5e4a7a;
   border-radius: 16px;
   padding: 10px;
+  padding-bottom: 16px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -80,11 +81,35 @@
 }
 
 .lootSkip {
-  margin-top: 10px;
-  background: none;
-  border: 2px solid #8c7fb5;
-  padding: 6px 14px;
-  border-radius: 20px;
+  margin-top: 8px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  background: #383d52;
   color: white;
+  font-size: 15px;
+  font-weight: 700;
   cursor: pointer;
+}
+.lootSkip:hover {
+  background: #4a5067;
+}
+.lootRarityUnder {
+  margin-top: 20px;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+
+.lootRarityUnder--common {
+  color: #e8e8e8;
+}
+
+.lootRarityUnder--uncommon {
+  color: #82ff98;
+}
+
+.lootRarityUnder--rare {
+  color: #47b9ff;
 }
