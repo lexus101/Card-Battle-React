@@ -26,6 +26,7 @@ export class GameManager {
     "darkened-grave": { status: "available" },
     "goblin-huts": { status: "available" },
     "monster-tunnel": { status: "available" },
+    "secret-passage": { status: "available" },
     "dragon-den": { status: "locked" },
       }
     };

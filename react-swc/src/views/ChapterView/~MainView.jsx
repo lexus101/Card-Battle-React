@@ -36,6 +36,14 @@ export const ChapterView = observer(() => {
     : "./Map/Dungeon2.png";
 
   const levels = [
+     {
+      id: 'secret-passage',
+      name: 'Secret Passage',
+      className: 'secret',
+      info: 'Secret passages to the Prime Dragon.',
+      x: 55,
+      y: 90,
+    },
     {
       id: 'darkened-grave',
       name: 'Darkened Grave',
@@ -44,10 +52,11 @@ export const ChapterView = observer(() => {
       x: 30,
       y: 40,
     },
+    
     {
       id: 'goblin-huts',
       name: 'Goblin Huts',
-      className: 'goblin-camp',
+      className: 'goblin-huts',
       info: 'Goblin enemies',
       x: 26,
       y: 77,
