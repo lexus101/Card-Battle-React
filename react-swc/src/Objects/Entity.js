@@ -23,6 +23,9 @@ export class Entity {
     this.costReductionAmount = 0;
     this.costReductionCharges = 0;
 
+    this.regeneration = [];
+    this.fortify = 0;
+    
     makeObservable(this, {
     onFire: observable,
     onWet: observable,
@@ -35,9 +38,15 @@ export class Entity {
     alive: observable,
     costReductionAmount: observable,
     costReductionCharges: observable,
+    regeneration: observable,
+    fortify: observable,
+
     takeDamage: action,
     addShield: action,
+    decayShield: action,
     checkAlive: action,
+    applyRegeneration: action,
+    triggerRegenerationEndTurn: action,
 
 
     });
@@ -59,9 +68,42 @@ export class Entity {
 
     this.checkAlive()
   }
+
   modifyHealth(amount) {this.health = Math.min(this.health + amount, this.maxHealth) }
   addShield(amount) {this.shield += amount; }
   checkAlive() {if (this.health <= 0){this.alive = false;}}
+
+  // NEW: add one regen instance
+  applyRegeneration(turns) {
+    this.regeneration.push(turns);
+  }
+
+   // NEW: heal 5 per active regen instance, then reduce each by 1
+  triggerRegenerationEndTurn() {
+    const activeCount = this.regeneration.length;
+    if (activeCount <= 0) return;
+
+    this.modifyHealth(activeCount * 5);
+
+    this.regeneration = this.regeneration
+      .map(turnsLeft => turnsLeft - 1)
+      .filter(turnsLeft => turnsLeft > 0);
+  }
+
+  //Shield Decay
+  getNextTurnShield() {
+    return Math.floor(this.shield / 2);
+  }
+
+  decayShield() {
+
+    if (this.fortify > 0) {
+      this.fortify -= 1;
+      return;
+    }
+
+    this.shield = Math.floor(this.shield / 2);
+  }
 
   playCard(target, card){
     // console.log(this, this.isFrozen)

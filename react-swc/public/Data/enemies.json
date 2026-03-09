@@ -80,7 +80,38 @@
     ],
     "image": "./Enemy/Bat.png"
   },
-  "DUNGEON_DRAGON": {
+  "SLIME": {
+    "name": "Slime",
+    "hp": 20,
+    "pattern":[
+        {"card":"REGENERATION", "target":"self", "time": 1},
+        {"card":"STRIKE", "target":"player", "time": 1},
+        {"card":"STRIKE", "target":"player", "time": 1}
+    ],
+    "image": "./Enemy/Slime.png"
+  },
+  "STONE_GOLEM": {
+    "name": "Stone Golem",
+    "hp": 30,
+    "pattern":[
+        {"card":"FORTIFY", "target":"self", "time": 1},
+        {"card":"GUARD", "target":"self", "time": 1},
+        {"card":"HEAVY_STRIKE", "target":"player", "time": 2},
+        {"card":"DEFEND", "target":"self", "time": 1}
+    ],
+    "image": "./Enemy/Stone_Golem.png"
+  },
+   "GIANT_SPIDER": {
+    "name": "Giant Spider",
+    "hp": 10,
+    "pattern":[
+        {"card":"DOUBLE_STRIKE", "target":"player", "time": 1},
+        {"card":"FIVEFOLD_STRIKE", "target":"player", "time": 1}
+
+    ],
+    "image": "./Enemy/Giant_Spider.png"
+  },
+  "OLD_DRAGON": {
     "name": "The Old Dragon",
     "hp": 100,
     "pattern_type": "Random",
@@ -91,6 +122,19 @@
         [ {"card":"REST", "target":"self"} ],
         [ {"card":"PYRO_PUNCH", "target":"player"}, {"card":"PYRO_PUNCH", "target":"player"} ]
     ],
-    "image": "./Enemy/Spear_Goblin.png"
+    "image": "./Enemy/Old_Dragon.png"
+  },
+  "RED_DRAGON": {
+    "name": "The Red Dragon",
+    "hp": 200,
+    "pattern_type": "Random",
+    "pattern":[
+        [ {"card":"KINDLE", "target":"player"}, {"card":"FIREBALL", "target":"player"} ,{"card":"FIREBALL", "target":"player"} ],
+        [ {"card":"GUARD", "target":"self"}, {"card":"REGENERATION", "target":"self"}, {"card":"REGENERATION", "target":"self"} ],
+        [ {"card":"STRIKE", "target":"player"}, {"card":"DOUBLE_STRIKE", "target":"player"} ],
+        [ {"card":"REST", "target":"self"} ],
+        [ {"card":"BLAZING_FLURRY", "target":"player"}, {"card":"PYRO_PUNCH", "target":"player"} ]
+    ],
+    "image": "./Enemy/Red_Dragon.png"
   }
 }

@@ -4,20 +4,20 @@ import { GameManager } from '../Objects/GameManager';
 import { createEnemy } from '../engine/enemyRegistry';
 
 function buildBattleState(set) {
-  const player = new Player('player', 20, null, [
-    //  "STRIKE",
-    //  "STRIKE",
-    //  "STRIKE",
-    //  "DEFEND",
-    //  "DEFEND",
-    //  "PATCH_UP"
-    "FIVEFOLD_STRIKE",
-    "FIVEFOLD_STRIKE",
-    "FIVEFOLD_STRIKE",
-    "FIVEFOLD_STRIKE",
-    "FIVEFOLD_STRIKE",
-    "FIVEFOLD_STRIKE",
-    "FIVEFOLD_STRIKE",
+  const player = new Player('player', 50, null, [
+      "STRIKE",
+      "STRIKE",
+      "STRIKE",
+      "DEFEND",
+      "DEFEND",
+      "PATCH_UP"
+    //"FIVEFOLD_STRIKE",
+    //"FIVEFOLD_STRIKE",
+    //"FIVEFOLD_STRIKE",
+    //"FIVEFOLD_STRIKE",
+    //"FIVEFOLD_STRIKE",
+    //"FIVEFOLD_STRIKE",
+    //"FIVEFOLD_STRIKE",
 
   ]);
 

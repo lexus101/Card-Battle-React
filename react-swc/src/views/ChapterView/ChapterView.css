@@ -1,158 +1,215 @@
 .chapter-view {
-    width: 100%;
-    max-width: 1600px;
-    margin: 0 auto;
-    padding: 20px;
-    box-sizing: border-box;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .map-container {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2; /* 新地图比例：1536 x 1024 */
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  background: #101827;
 }
 
 .dungeon-map {
-    display: block;
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    user-select: none;
-    pointer-events: none; /* Prevents image from interfering with button clicks */
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
 }
 
+/* 按钮基础 */
 .level-button {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    padding: 12px 24px;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    border: 2px solid #ffd700;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    white-space: nowrap;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    z-index: 10;
-    pointer-events: auto; /* Ensures buttons remain clickable */
+  position: absolute;
+  transform: translate(-50%, -50%);
+  min-width: 120px;
+  padding: 10px 18px;
+  background: rgba(10, 12, 18, 0.78);
+  color: #f6f1db;
+  border: 2px solid rgba(255, 223, 120, 0.9);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+  pointer-events: auto;
 }
 
-/* Button hover effects */
 .level-button:hover {
-    background: rgba(255, 215, 0, 0.8);
-    color: black;
-    transform: translate(-50%, -50%) scale(1.1);
-    border-color: white;
-    box-shadow: 0 4px 16px rgba(255, 215, 0, 0.4);
+  background: rgba(255, 220, 120, 0.9);
+  color: #1a1a1a;
+  border-color: #fff4c4;
+  transform: translate(-50%, -50%) scale(1.06);
+  box-shadow: 0 6px 16px rgba(255, 215, 0, 0.25);
 }
 
-/* Button active/pressed state */
 .level-button:active {
-    transform: translate(-50%, -50%) scale(0.95);
+  transform: translate(-50%, -50%) scale(0.97);
 }
 
-/* Individual button styling (optional - for different level types) */
-.level-button.bat-cave {
-    border-color: #4a4a4a;
-    background: rgba(40, 40, 40, 0.8);
+.level-button:focus {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(255, 215, 0, 0.45),
+    0 6px 16px rgba(0, 0, 0, 0.25);
 }
 
-.level-button.goblin-huts {
-    border-color: #2e7d32;
-    background: rgba(30, 70, 30, 0.8);
-}
-
-.level-button.dragon-lair {
-    border-color: #c62828;
-    background: rgba(120, 30, 30, 0.8);
-}
-
-.level-button.treasure-room {
-    border-color: #ffd700;
-    background: rgba(80, 60, 20, 0.8);
-}
-
-.level-button.secret-passage {
-    border-color: #7b1fa2;
-    background: rgba(60, 20, 80, 0.8);
-}
-
-/* Responsive adjustments for very small screens */
-@media screen and (max-width: 768px) {
-    .level-button {
-        padding: 8px 16px;
-        font-size: 14px;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .level-button {
-        padding: 6px 12px;
-        font-size: 12px;
-    }
-}
-
-/* Optional: Add a pulse animation for the buttons */
-@keyframes pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4);
-    }
-    70% {
-        box-shadow: 0 0 0 10px rgba(255, 215, 0, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
-    }
-}
-
-/* Add this class to buttons you want to pulse (e.g., main levels) */
-.level-button.pulse {
-    animation: pulse 2s infinite;
-}
-
-/* Optional: Tooltip-style info for buttons */
+/* Tooltip */
 .level-button::after {
-    content: attr(data-info);
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    white-space: nowrap;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    margin-bottom: 8px;
+  content: attr(data-info);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(8, 10, 16, 0.92);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  pointer-events: none;
 }
 
 .level-button:hover::after {
-    opacity: 1;
-    visibility: visible;
+  opacity: 1;
+  visibility: visible;
 }
 
-/* Accessibility focus styles */
-.level-button:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.5);
-}
-
-/* Optional: Add a subtle overlay to the map for better button visibility */
+/* 地图整体轻微压暗，方便看按钮 */
 .map-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.1) 100%);
-    pointer-events: none;
-    z-index: 5;
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.08),
+    rgba(0, 0, 0, 0.12)
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ===== 各区域定位（按新地图估算） ===== */
+
+/* 左下：哥布林村 */
+.level-button.goblin-camp {
+  left: 25%;
+  top: 73%;
+  border-color: #7dcf69;
+  background: rgba(36, 72, 28, 0.84);
+}
+
+/* 左上：墓地 */
+.level-button.graveyard {
+  left: 25%;
+  top: 28%;
+  border-color: #9b7cff;
+  background: rgba(60, 40, 96, 0.84);
+}
+
+/* 中右：矿洞 */
+.level-button.mine {
+  left: 69%;
+  top: 42%;
+  border-color: #c8b07b;
+  background: rgba(88, 70, 42, 0.84);
+}
+
+/* 右下：龙巢 */
+.level-button.dragon-lair {
+  left: 84%;
+  top: 80%;
+  border-color: #e85b4f;
+  background: rgba(108, 26, 26, 0.88);
+}
+
+/* 中央主路节点（可选） */
+.level-button.crossroads {
+  left: 50%;
+  top: 53%;
+  border-color: #e7ddb0;
+  background: rgba(72, 68, 46, 0.84);
+}
+
+/* 右上：蜘蛛洞 / 隐藏房 */
+.level-button.spider-den {
+  left: 88%;
+  top: 22%;
+  border-color: #cfcfcf;
+  background: rgba(52, 52, 52, 0.84);
+}
+
+/* ===== level status ===== */
+
+.level-button.available {
+  opacity: 1;
+}
+
+.level-button.completed {
+  background: rgba(50, 92, 50, 0.88);
+  border-color: #9fe28b;
+  color: #efffe9;
+  cursor: default;
+  box-shadow: 0 3px 12px rgba(80, 160, 80, 0.25);
+}
+
+.level-button.completed:hover {
+  transform: translate(-50%, -50%);
+  background: rgba(50, 92, 50, 0.88);
+  color: #efffe9;
+  border-color: #9fe28b;
+  box-shadow: 0 3px 12px rgba(80, 160, 80, 0.25);
+}
+
+.level-button.locked {
+  background: rgba(60, 60, 60, 0.65);
+  border-color: #777;
+  color: #aaa;
+  cursor: not-allowed;
+  opacity: 0.75;
+  filter: grayscale(0.35);
+}
+
+.level-button.locked:hover {
+  transform: translate(-50%, -50%);
+  background: rgba(60, 60, 60, 0.65);
+  color: #aaa;
+  border-color: #777;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* 响应式 */
+@media screen and (max-width: 768px) {
+  .level-button {
+    min-width: 96px;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .chapter-view {
+    padding: 10px;
+  }
+
+  .level-button {
+    min-width: 80px;
+    padding: 6px 10px;
+    font-size: 11px;
+    border-width: 1.5px;
+  }
 }

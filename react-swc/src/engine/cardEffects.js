@@ -38,4 +38,9 @@ export const EFFECT_ACTIONS = {
     target.deck.hand.push(tempCard);
   }
 },
+ APPLY_REGEN: (target, value) => target.applyRegeneration(value),
+  APPLY_FORTIFY: (target, value) => {
+    target.fortify += value;
+  }
+ 
 };

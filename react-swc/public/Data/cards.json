@@ -27,7 +27,7 @@
     "rarity": "uncommon",
     "rewardable": false,
     "description":"Gain 20 Shield.",
-    "image": "./Card/Defend.png",
+    "image": "./Card/Guard.png",
     "energy_cost": 2,
     "effects": [
       { "type": "SHIELD", "value": 20, "target": "target" }
@@ -67,6 +67,18 @@
     "energy_cost": 1,
     "effects": [
       { "type": "SHIELD", "value": 8, "target": "target" }
+    ]
+  },
+  "FORTIFY": {
+    "id": "FORTIFY",
+    "name": "Fortify",
+    "rarity": "uncommon",
+    "rewardable": true,
+    "description": "Shield does not decay for 2 turns.",
+    "image": "./Card/Fortify.png",
+    "energy_cost": 0,
+    "effects": [
+      { "type": "APPLY_FORTIFY", "value": 2, "target": "self" }
     ]
   },
   "PATCH_UP": {
@@ -356,5 +368,17 @@
       { "type": "DAMAGE", "value": 7, "target": "target" },
       { "type": "HEAL", "value": 7, "target": "self" }
     ]
-  }
+  },
+  "REGENERATION": {
+  "id": "REGENERATION",
+  "name": "Regeneration",
+  "rarity": "epic",
+  "rewardable": true,
+  "description": "Gain Regeneration for 5 turns. Regen stacks healing.",
+  "image": "./Card/Regeneration.png",
+  "energy_cost": 1,
+  "effects": [
+    { "type": "APPLY_REGEN", "value": 5, "target": "self" }
+  ]
+}
 }
