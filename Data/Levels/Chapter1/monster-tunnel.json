@@ -1,0 +1,9 @@
+{
+  "waves": [
+    { "enemies": ["SLIME" , "SLIME"] },
+    { "enemies": ["SLIME" , "GIANT_SPIDER", "SLIME"] },
+    { "enemies": ["STONE_GOLEM", "SLIME" ]},
+    { "enemies": ["STONE_GOLEM", "GIANT_SPIDER", "SLIME"] },
+    { "enemies": ["STONE_GOLEM", "GIANT_SPIDER" ,"GIANT_SPIDER","GIANT_SPIDER" ] }
+  ]
+}
