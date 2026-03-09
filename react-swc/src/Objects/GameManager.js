@@ -123,20 +123,27 @@ runEnemyTurn() {
       player: this.player,
       self: e,
     };
+
+     // 敌人行动前触发decay shield
+    if (e.alive) {
+      e.decayShield();
+    }
+    
+
+
     e.intents.forEach((intent) => {
       const target = matchTarget[intent.target]
        if (!target) return;
       e.playCard(target, intent.card)
     })
     e.getNextIntent()
-   
-    // 敌人行动后触发 regen
-    if (e.alive) {
-      e.triggerRegenerationEndTurn();
-      e.decayShield();
-    }
     
+     // 敌人行动前触后regen
+      if (e.alive) {
+      e.triggerRegenerationEndTurn();
 
+    }
+   
   //   let safety = 10; // 防止死循环
   //   let chainMode = false;
 
