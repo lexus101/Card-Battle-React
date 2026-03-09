@@ -22,7 +22,7 @@ export const EFFECT_ACTIONS = {
 
   target.costReductionAmount = Math.max(target.costReductionAmount, amount);
   target.costReductionCharges += charges;
-},
+  },
   CREATE_TEMP_CARD_IN_HAND: (target, value) => {
   const baseCard = CardLibrary[value.cardId];
   if (!baseCard) return;
@@ -37,8 +37,8 @@ export const EFFECT_ACTIONS = {
 
     target.deck.hand.push(tempCard);
   }
-},
- APPLY_REGEN: (target, value) => target.applyRegeneration(value),
+  },
+  APPLY_REGEN: (target, value) => target.applyRegeneration(value),
   APPLY_FORTIFY: (target, value) => {
     target.fortify += value;
   }

@@ -47,7 +47,7 @@ export class Entity {
     checkAlive: action,
     applyRegeneration: action,
     triggerRegenerationEndTurn: action,
-
+    triggerBurnTick: action,
 
     });
   }
@@ -55,7 +55,7 @@ export class Entity {
     this.onFire += amount
   }
   takeDamage(amount, type) {
-    if (type=="fire") {amount += this.onFire; }
+  //  if (type=="fire") {amount += this.onFire; }
     if (type=="elec") {amount += this.onWet}
 
     if (this.shield >= amount){
@@ -72,6 +72,18 @@ export class Entity {
   modifyHealth(amount) {this.health = Math.min(this.health + amount, this.maxHealth) }
   addShield(amount) {this.shield += amount; }
   checkAlive() {if (this.health <= 0){this.alive = false;}}
+
+  triggerBurnTick() {
+    if (this.onFire <= 0) return;
+
+    const burnDamage = this.onFire;
+
+    // burn 伤害直接打到这个单位
+    this.takeDamage(burnDamage, "burn");
+
+    // 伤害结算后 burn 减半，向下取整
+    this.onFire = Math.floor(this.onFire / 2);
+  }
 
   // NEW: add one regen instance
   applyRegeneration(turns) {

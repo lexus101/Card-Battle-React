@@ -105,6 +105,7 @@ endTurn() {
   }
 
   // 先结算玩家回合末效果
+  this.player.triggerBurnTick();
   this.player.triggerRegenerationEndTurn();
   this.player.decayShield();
 
@@ -141,7 +142,9 @@ runEnemyTurn() {
     
      // 敌人行动前触后regen
       if (e.alive) {
+      e.triggerBurnTick();
       e.triggerRegenerationEndTurn();
+      
 
     }
    

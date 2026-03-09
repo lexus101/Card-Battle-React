@@ -10,8 +10,8 @@ function getStatusList(unit) {
     unit.onFire > 0 && {
       key: "fire",
       icon: "🔥",
-      label: "Burn",
-      value: unit.onFire,
+      label: "",
+      value: `${unit.onFire} (${Math.floor(unit.onFire / 2)})`,
     },
 
     unit.onWet > 0 && {
@@ -45,7 +45,7 @@ function getStatusList(unit) {
     unit.shield > 0 && {
       key: "shield",
       icon: "🛡️",
-      label: "Shield",
+      label: "",
       value: unit.fortify > 0
       ? `${unit.shield}`
       : `${unit.shield} (${Math.floor(unit.shield/2)})`

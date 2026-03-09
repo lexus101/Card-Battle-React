@@ -5,9 +5,9 @@ import { createEnemy } from '../engine/enemyRegistry';
 
 function buildBattleState(set) {
   const player = new Player('player', 50, null, [
-      "STRIKE",
-      "STRIKE",
-      "STRIKE",
+      "FIREBALL",
+      "FIREBALL",
+      "FIREBALL",
       "DEFEND",
       "DEFEND",
       "PATCH_UP"

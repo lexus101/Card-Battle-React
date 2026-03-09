@@ -201,8 +201,8 @@
     "image": "./Card/Fireball.png",
     "energy_cost": 1,
     "effects": [
-      { "type": "DAMAGE_FIRE", "value": 5, "target": "target" },
-      { "type": "APPLY_BURN", "value": 2, "target": "target" }
+      { "type": "DAMAGE_FIRE", "value": 4, "target": "target" },
+      { "type": "APPLY_BURN", "value": 4, "target": "target" }
 
     ]
   },
@@ -211,13 +211,12 @@
     "name": "Flame Burst",
     "rarity": "rare",
     "rewardable": true,
-    "description":"Draw 1. Apply 3 Burn. Your Next Card Cost 1 Less.",
+    "description":"Apply 4 Burn. Gain 3 charge.",
     "image": "./Card/Flame_Burst.png",
     "energy_cost": 1,
     "effects": [
-      { "type": "DRAW", "value": 1, "target": "self" },
-      { "type": "APPLY_BURN", "value": 3, "target": "target" },
-      { "type": "REDUCE_NEXT_CARDS_COST", "value": { "amount": 1, "charges": 1 }, "target": "self" }
+      { "type": "APPLY_BURN", "value": 4, "target": "target" },
+      { "type": "CHARGE", "value": 3, "target": "self" }
 
     ]
   },
