@@ -8,117 +8,101 @@ export class Entity {
     this.name = name;
     this.health = health;
     this.maxHealth = health;
-    this.shield = 0;
     this.intents = [];
     this.alive = true;
     this.image = image
 
-    this.onFire = 0;
-    this.onWet = 0;
-    this.onElec = 0;
-    this.charge = 0;
-    this.isFrozen = false;
     this.chargeConsumed = false;
 
     this.costReductionAmount = 0;
     this.costReductionCharges = 0;
 
-    this.regeneration = [];
-    this.fortify = 0;
-    
-    makeObservable(this, {
-    onFire: observable,
-    onWet: observable,
-    onElec: observable,
-    charge: observable,
-    isFrozen: observable,
-    health: observable,
-    shield: observable,
-    intents: observable,
-    alive: observable,
-    costReductionAmount: observable,
-    costReductionCharges: observable,
-    regeneration: observable,
-    fortify: observable,
+    this.stack = {
+      "burn": 0,
+      "flow": 0,
+      "freeze": 0,
+      "charge": 0,
+      "regeneratioin": [],
+      "fortify": 0,
+      "shield": 0,
+      "stun": false,
+    }    
 
-    takeDamage: action,
-    addShield: action,
-    decayShield: action,
-    checkAlive: action,
-    applyRegeneration: action,
-    triggerRegenerationEndTurn: action,
-    triggerBurnTick: action,
+    makeObservable(this, {
+      stack: observable,
+      health: observable,
+      intents: observable,
+      alive: observable,
+      costReductionAmount: observable,
+      costReductionCharges: observable,
+
+      takeDamage: action,
+      applyStack: action,
+      checkAlive: action,
 
     });
   }
-  applyfire(amount){
-    this.onFire += amount
+  applyStack(type, amount){
+    if (type == "Regeneration"){ this.stack["Regeneration"].push(turns); return;}
+    if (type == "Stun"){ this.stack["Stun"] = true; }
+    this.stack[type] += amount;
   }
-  takeDamage(amount, type) {
-  //  if (type=="fire") {amount += this.onFire; }
-    if (type=="elec") {amount += this.onWet}
 
-    if (this.shield >= amount){
-     this.shield -= amount;
+  takeDamage(amount, type) {
+    console.log(amount, type)
+    console.log(this.health, amount)
+    if (this.stack.shield >= amount){
+     this.stack.shield -= amount;
     } else{
-     amount -= this.shield;
-     this.shield = 0;
+     amount -= this.stack.shield;
+     this.stack.shield = 0;
      this.health -= amount;
     }
-
     this.checkAlive()
   }
 
   modifyHealth(amount) {this.health = Math.min(this.health + amount, this.maxHealth) }
-  addShield(amount) {this.shield += amount; }
   checkAlive() {if (this.health <= 0){this.alive = false;}}
+  
+  handleOverTurnEffects(){
+    //handle Burn
+    if (this.stack.burn > 0){
+      const burnDamage = this.stack.burn;
 
-  triggerBurnTick() {
-    if (this.onFire <= 0) return;
+      // burn 伤害直接打到这个单位
+      this.takeDamage(burnDamage, "burn");
 
-    const burnDamage = this.onFire;
-
-    // burn 伤害直接打到这个单位
-    this.takeDamage(burnDamage, "burn");
-
-    // 伤害结算后 burn 减半，向下取整
-    this.onFire = Math.floor(this.onFire / 2);
-  }
-
-  // NEW: add one regen instance
-  applyRegeneration(turns) {
-    this.regeneration.push(turns);
-  }
-
-   // NEW: heal 5 per active regen instance, then reduce each by 1
-  triggerRegenerationEndTurn() {
-    const activeCount = this.regeneration.length;
-    if (activeCount <= 0) return;
-
-    this.modifyHealth(activeCount * 5);
-
-    this.regeneration = this.regeneration
-      .map(turnsLeft => turnsLeft - 1)
-      .filter(turnsLeft => turnsLeft > 0);
-  }
-
-  //Shield Decay
-  getNextTurnShield() {
-    return Math.floor(this.shield / 2);
-  }
-
-  decayShield() {
-
-    if (this.fortify > 0) {
-      this.fortify -= 1;
-      return;
+      // 伤害结算后 burn 减半，向下取整
+      this.stack.burn = Math.floor(this.stack.burn / 2);
     }
 
-    this.shield = Math.floor(this.shield / 2);
+    //handle Regen
+    if (this.stack.regeneration > 0){
+      const activeCount = this.stack.regeneration.length;
+      if (activeCount <= 0) return;
+
+      this.modifyHealth(activeCount * 5);
+
+      this.stack.regeneration = this.stack.regeneration
+        .map(turnsLeft => turnsLeft - 1)
+        .filter(turnsLeft => turnsLeft > 0);
+    }
+
+    //handle Shield
+    if (this.stack.shield > 0 && this.stack.fortify <= 0){
+      Math.floor(this.stack.shield /= 2)
+    }
+
+    //handle Fortify
+    if (this.stack.fortify > 0){
+      this.fortify -= 1;
+    }
   }
 
+
+
+  getNextTurnShield() { return Math.floor(this.shield / 2);}
   playCard(target, card){
-    // console.log(this, this.isFrozen)
     this.chargeConsumed = false;
 
 
@@ -129,7 +113,11 @@ export class Entity {
         
         const effect_action = EFFECT_ACTIONS[effect.type];
         if (effect_action) {
-            if (effect.target == "target"){ effect_action(target, effect.value); }
+            if (effect.target == "target"){ 
+              target.forEach(element => {
+                effect_action(element, effect.value); 
+              });
+            }
             else { effect_action(this, effect.value); }
         }
     });
@@ -137,12 +125,12 @@ export class Entity {
     this.isFrozen = false;  
   }
   effectModifier(effect){
- if (this.isFrozen) {
+ if (this.stack.freeze == 3) {
     effect.type = "NULL";
     return;
   }
     if (effect.type == "DAMAGE"){ 
-      effect.value += this.charge
+      effect.value += this.stack.charge
       this.chargeConsumed = true;
     }
   }
@@ -155,18 +143,31 @@ export class Player extends Entity{
   constructor(name, health, image, deck) {
         super(name, health, image);
         this.deck = new Deck(deck);
+        this.energy = 3;
+        this.maxEnergy = 3;
+        this.costReduction = []
         
         makeObservable(this, {
             deck: observable,
+            costReduction: observable,
+            energy: observable,
             playCard: action,
             drawCard: action,
             refreshSelected: action
         });
-      //  this.drawCard(4);
   }
   playCard(target, card, idx) {
-        super.playCard(target, card);
-        this.deck.discardFromHand(idx);
+
+    //Handle Energy Reduction
+    let cost = card.energy_cost
+    console.log(this.energy)
+    if (this.costReduction.length > 0){ 
+      cost -= this.costReduction[0]
+      this.costReduction.splice(0,1)
+    }
+    this.energy -= cost;
+    super.playCard(target, card);
+    this.deck.discardFromHand(idx);
   }
   drawCard(n){
     for (let i = 0; i < n; i++) {
@@ -259,67 +260,24 @@ class Deck {
 
 
 export class Enemy extends Entity {
-    constructor(name, health, image){
+    constructor(name, health, image, possibleMoves, pattern_type){
         super(name, health, image);
 
-        this.possibleMoves = [];
-        this.moveIndex = 0;
+        this.intentGenerator = new pattern_type(possibleMoves);
+        this.intents = this.intentGenerator.generateNext();
 
         makeObservable(this, {
-            playCard: action,
-            initializeIntents: action,
-            consumeIntent: action,
-            possibleMoves: observable,
-            moveIndex: observable,
+          playCard: action,
+          intentGenerator: observable,
         });
-    }
-
-    initializeIntents(possibleMoves, pattern_type) {
-        // this.possibleMoves = (possibleMoves || []).map(move => ({ ...move }));
-        // this.moveIndex = 0;
-        // this.intents = [];
-
-        // // 预填 3 个 intent
-        // for (let i = 0; i < 3; i++) {
-        //     const nextIntent = this.getNextIntent();
-        //     if (nextIntent) {
-        //         this.intents.push(nextIntent);
-        //     }
-        // }
-
-        this.intentGenerator = new pattern_type(possibleMoves);
-        makeObservable(this, {intentGenerator: observable})
-        // Pre-fill the window with 3 items
-        this.intents = this.intentGenerator.generateNext();
     }
 
 
     getNextIntent() {
-        this.intents = this.intentGenerator.generateNext()
+        this.intents = this.intentGenerator.generateNext()    }
 
-        // if (!this.possibleMoves.length) return null;
-
-        // const baseMove = this.possibleMoves[this.moveIndex % this.possibleMoves.length];
-        // this.moveIndex += 1;
-
-        // // 一定要 clone，不要直接共用原对象
-        // return { ...baseMove };
-    }
-
-    consumeIntent() {
-        this.intents.shift();
-        this.getNextIntent()
-
-        // const newIntent = this.getNextIntent();
-        // if (newIntent) {
-        //     this.intents.push(newIntent);
-        // }
-    }
 
     playCard(target, card){
-
         super.playCard(target, CardLibrary[card]);
-        // this.getNextIntent()
-        // this.consumeIntent();
     }
 }

@@ -6,22 +6,22 @@ export const CardLibrary = await response.json()
 export const EFFECT_ACTIONS = {
   DAMAGE: (target, value) => target.takeDamage(value),
   HEAL: (target, value) => target.modifyHealth(value), // Or addHeal
-  SHIELD: (target, value) => target.addShield(value),
   DRAW: (target, value) => target.drawCard(value),
-  APPLY_BURN: (target, value) => target.onFire += value,
-  APPLY_WET: (target, value) => target.onWet += value,
-  APPLY_ELEC: (target, value) => target.onElec += value,
+  SHIELD: (target, value) => target.applyStack("shield", value),
+  APPLY_BURN: (target, value) => target.applyStack("burn", value),
+  APPLY_WET: (target, value) => target.applyStack("flow", value),
   DAMAGE_FIRE: (target, value) => target.takeDamage(value, 'fire'),
   DAMAGE_WATER: (target, value) => target.takeDamage(value, 'water'),
   DAMAGE_ELEC: (target, value) => target.takeDamage(value, 'elec'),
-  FREEZE: (target, value) => target.isFrozen = true,
-  CHARGE: (target, value) => target.charge += value,
+  FREEZE: (target, value) => target.applyStack("freeze", value),
+  CHARGE: (target, value) => target.target.applyStack("charge", value),
+  APPLY_REGEN: (target, value) => target.applyStack("regeneration", value),
+  APPLY_FORTIFY: (target, value) => target.applyStack("fortify", value),
   REDUCE_NEXT_CARDS_COST: (target, value) => {
-  const amount = value?.amount ?? 0;
-  const charges = value?.charges ?? 0;
-
-  target.costReductionAmount = Math.max(target.costReductionAmount, amount);
-  target.costReductionCharges += charges;
+    for (let i = 0; i < value.charges; i++){
+      if (target.costReduction[i]){ target.costReduction[i] += value.amount }
+      else {target.costReduction.push(value.amount)}
+    }
   },
   CREATE_TEMP_CARD_IN_HAND: (target, value) => {
   const baseCard = CardLibrary[value.cardId];
@@ -38,9 +38,5 @@ export const EFFECT_ACTIONS = {
     target.deck.hand.push(tempCard);
   }
   },
-  APPLY_REGEN: (target, value) => target.applyRegeneration(value),
-  APPLY_FORTIFY: (target, value) => {
-    target.fortify += value;
-  }
  
 };

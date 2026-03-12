@@ -18,16 +18,58 @@ export const BattleView = observer(() => {
   const player = gameManager.player
   const enemies = gameManager.enemies
   const current_enemies = enemies[gameManager.enemies_index] || [];
-  const [selectedCardIdx, setSelectedCardIdx] = useState(null);
+  const [selectedCard, setSelectedCard] = useState({"card":null, "idx":null});
 
+  const [selectedTargets, setSelectedTargets] = useState({"targets":[], "idx":[]});
 
   
-  const handleTargetSelect = (target) => {
-    if (selectedCardIdx !== null) {
-      gameManager.playCard(target, selectedCardIdx);
-      setSelectedCardIdx(null);
+
+  const handleTargetSelect = (target, idx) => {
+    if (selectedCard.card !== null) {
+      setSelectedTargets((prev) => {
+        const existingIndex = prev.idx.indexOf(idx);
+
+        // If already selected, remove it
+        if (existingIndex >= 0) {
+          return {
+            targets: prev.targets.filter((_, i) => i !== existingIndex),
+            idx: prev.idx.filter((_, i) => i !== existingIndex),
+          };
+        }
+
+        // Otherwise, add it
+        let newTargets = [...prev.targets, target];
+        let newTargetsIdx = [...prev.idx, idx];
+
+        // Enforce max target limit
+        if (newTargets.length > selectedCard.card.targets) {
+          newTargets.shift();
+          newTargetsIdx.shift();
+        }
+        // gameManager.playCard(target, selectedCardIdx);
+        // setSelectedCardIdx(null);
+
+        return { targets: newTargets, idx: newTargetsIdx };
+      });
     }
   };
+
+  const handleCardSelect = (card, idx) => {
+    if (selectedCard.idx != idx){ 
+      setSelectedCard({"card": card, "idx": idx}) 
+      setSelectedTargets({"targets":[], "idx":[]})
+    }
+    else {
+       setSelectedCard({"card":null, "idx": null})
+       setSelectedTargets({"targets":[], "idx":[]})
+    }
+  }
+
+  const handlePlayCard = () => {
+    gameManager.playCard(selectedTargets.targets, selectedCard.idx);
+    setSelectedCard({"card":null, "idx": null});
+    setSelectedTargets({"targets":[], "idx":[]})
+  }
 
   // Placeholder synergy value (replace with actual store data)
   const synergy = 3;
@@ -38,7 +80,7 @@ export const BattleView = observer(() => {
   return (
     <div
       className='battleContainer'
-      onClick={() => setSelectedCardIdx(null)}
+      // onClick={() => setSelectedCardIdx(null)}
     >
       {/* Top Bar: Synergy (left) and Turn (center) */}
       <div className='top-bar'>
@@ -56,19 +98,20 @@ export const BattleView = observer(() => {
       {/* Enemies Row - each enemy now in a wrapper with intents on side */}
       <div className='enemy-row-wrapper'>
         {current_enemies.map((enemy, idx) => (
-          <EnemyUnit key={idx} onPress={() => handleTargetSelect(enemy)} enemy={enemy} />
+          <EnemyUnit key={idx + 1} onPress={() => handleTargetSelect(enemy, idx + 1)} enemy={enemy} enemy_idx={idx+1} selectedTargets={selectedTargets} />
         ))}
       </div>
 
       {/* Bottom Layout */}
       <div className='footerRow'>
           {/* Left Section: Deck above, then Player + Refresh side by side */}
-          <PlayerUnit onPress={() => handleTargetSelect(player)} player={player} gameManager={gameManager}></PlayerUnit>
+          <PlayerUnit onPress={() => handleTargetSelect(player, 0)} player={player} selectedTargets={selectedTargets}></PlayerUnit>
 
           {/* Hand Section */}
+          <button onClick={handlePlayCard} className="clickable refresh-button"> Play Card </button>
           <div className='handRow'>
             {player.deck.hand.map((card, idx) => (
-              <HandCardView key={idx} onPress={() => setSelectedCardIdx(prev => (prev === idx ? null : idx))} player={player} card={card} card_idx={idx} selectedCardIdx={selectedCardIdx}></HandCardView>
+              <HandCardView key={idx} onPress={() => handleCardSelect(card, idx)} player={player} card={card} card_idx={idx} selectedCard={selectedCard}></HandCardView>
             ))}
           </div>
           <button onClick={gameManager.endTurn} className="clickable refresh-button"> End Turn</button>

@@ -8,8 +8,6 @@ export class GameManager {
     this.enemies_index = 0;
 
     this.turn = 1;
-    this.energy = 3;
-    this.maxEnergy = 3;
     this.cardsPerTurn = 5;
     this.playerTurn = true;
 
@@ -46,7 +44,8 @@ export class GameManager {
     this.playerTurn = true;
     this.energy = this.maxEnergy;
     this.player.drawCard(this.cardsPerTurn);
-    // this.updateGame();
+    this.player.handleOverTurnEffects()
+    this.updateGame();
   }
 
   playCard(target, card_idx) {
@@ -56,32 +55,8 @@ export class GameManager {
     const card = this.player.deck.hand[card_idx];
     if (!card) return;
 
-    const baseCost = card.energy_cost ?? 1;
-
-    // 先记录这张牌打出前，玩家身上有没有旧的减费buff
-    const hadReductionBeforePlay = this.player.costReductionCharges > 0;
-    const reductionBeforePlay = hadReductionBeforePlay
-      ? this.player.costReductionAmount
-      : 0;
-
-    const finalCost = Math.max(0, baseCost - reductionBeforePlay);
-
-    if (this.energy < finalCost) return;
-
-    this.energy -= finalCost;
-
-    // 这里 Rush / 其他牌的效果才会结算
     this.player.playCard(target, card, card_idx);
 
-    // 只消耗“这张牌打出前就已经存在”的减费次数
-    if (hadReductionBeforePlay) {
-      this.player.costReductionCharges -= 1;
-
-      if (this.player.costReductionCharges <= 0) {
-        this.player.costReductionCharges = 0;
-        this.player.costReductionAmount = 0;
-      }
-    }
 
     this.updateGame();
   }
@@ -104,11 +79,6 @@ endTurn() {
     return;
   }
 
-  // 先结算玩家回合末效果
-  this.player.triggerBurnTick();
-  this.player.triggerRegenerationEndTurn();
-  this.player.decayShield();
-
   // 然后如果开 loot / complete，就停
   if (this.lootOpen || this.runComplete) return;
 
@@ -128,7 +98,7 @@ runEnemyTurn() {
 
      // 敌人行动前触发decay shield
     if (e.alive) {
-      e.decayShield();
+      e.handleOverTurnEffects()
     }
     
 
@@ -138,62 +108,7 @@ runEnemyTurn() {
        if (!target) return;
       e.playCard(target, intent.card)
     })
-    e.getNextIntent()
-    
-     // 敌人行动前触后regen
-      if (e.alive) {
-      e.triggerBurnTick();
-      e.triggerRegenerationEndTurn();
-      
-
-    }
-   
-  //   let safety = 10; // 防止死循环
-  //   let chainMode = false;
-
-  //   while (e.alive && e.intents.length > 0 && safety > 0) {
-  //     safety--;
-
-  //     const intent = e.intents[0];
-  //     if (!intent) break;
-
-  //     // 先头是 1：正常放一招，然后结束
-  //     if (!chainMode && intent.time === 1) {
-  //       const target = matchTarget[intent.target];
-  //       if (!target) break;
-
-  //       e.playCard(target, intent.card);
-  //       break;
-  //     }
-
-  //     // 先头是 0：进入连锁模式
-  //     if (intent.time === 0) {
-  //       chainMode = true;
-
-  //       const target = matchTarget[intent.target];
-  //       if (!target) break;
-
-  //       e.playCard(target, intent.card);
-  //       continue;
-  //     }
-
-  //     // 连锁模式中遇到 1：放掉并结束
-  //     if (chainMode && intent.time === 1) {
-  //       const target = matchTarget[intent.target];
-  //       if (!target) break;
-
-  //       e.playCard(target, intent.card);
-  //       break;
-  //     }
-
-  //     // 遇到大于1：不放，只减1，然后结束
-  //     if (intent.time > 1) {
-  //       intent.time -= 1;
-  //       break;
-  //     }
-
-  //     break;
-  //   }
+    e.getNextIntent()   
    });
 }
 

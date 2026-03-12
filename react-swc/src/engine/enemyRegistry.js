@@ -12,8 +12,6 @@ export function createEnemy(type) {
   const data = EnemyRegistry[type];
   if (!data) throw new Error(`Enemy type ${type} not found!`);
   const pattern_type = matchPatternType[data.pattern_type ? data.pattern_type : "Loop"]
-  // Return a new instance using the data
-  const enemy = new Enemy(data.name, data.hp, data.image);
-  enemy.initializeIntents(data.pattern, pattern_type);
-  return enemy
+
+  return new Enemy(data.name, data.hp, data.image, data.pattern, pattern_type);
 }

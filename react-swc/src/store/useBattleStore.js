@@ -5,12 +5,15 @@ import { createEnemy } from '../engine/enemyRegistry';
 
 function buildBattleState(set) {
   const player = new Player('player', 50, null, [
+      "STRIKE",
       "FIREBALL",
-      "FIREBALL",
-      "FIREBALL",
-      "DEFEND",
-      "DEFEND",
-      "PATCH_UP"
+      // "FIREBALL",
+      // "DEFEND",
+      // "DEFEND",
+      // "PATCH_UP",
+      "GUARD",
+      "RUSH",
+      "RUSH"
     //"FIVEFOLD_STRIKE",
     //"FIVEFOLD_STRIKE",
     //"FIVEFOLD_STRIKE",

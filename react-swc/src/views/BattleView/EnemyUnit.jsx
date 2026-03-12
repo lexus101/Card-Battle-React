@@ -5,43 +5,13 @@ import { HandCardView } from "./HandCardView";
 
 
 
-// function inferCategory(def) {
-//   if (!def) return "UTILITY";
-
-//   // If you later add a manual override, keep this:
-//   if (def.category) return def.category;
-
-//   const types = (def.effects || []).map(e => e.type);
-
-//   // Attack if it deals damage
-//   if (types.includes("DAMAGE")) return "ATTACK";
-
-//   // Defend if it adds shield/block
-//   if (types.includes("SHIELD") || types.includes("BLOCK")) return "DEFEND";
-
-//   // Utility if it heals, draws, etc.
-//   if (types.includes("HEAL") || types.includes("DRAW")) return "UTILITY";
-
-//   // default fallback
-//   return "UTILITY";
-// }
-
-
-// function getIntentGlyph(def) {
-//   const cat = inferCategory(def);
-//   if (cat === "ATTACK") return "⚔";
-//   if (cat === "DEFEND") return "🛡";
-//   return "✦";
-// }
-
-
-export const EnemyUnit = observer(({ onPress, enemy }) => {
-  const healthPercent = (enemy.health / (enemy.maxHealth || 100)) * 100;
+export const EnemyUnit = observer(({ onPress, enemy, enemy_idx, selectedTargets }) => {
+  const healthPercent = Math.max(0, (enemy.health / (enemy.maxHealth)) * 100);
   return (
     <div className="enemy-wrapper">
 
-      <div className="enemyUnitWrap" onClick={onPress}>
-        <div className='enemyCard'>
+      <div className='enemyUnitWrap' onClick={onPress}>
+        <div className={`enemyCard ${selectedTargets.idx.includes(enemy_idx) ? 'selectedEnemy' : ''}`}>
           <img src={enemy.image} alt="Enemy" className='enemyImg' />
           <div className='statsOverlay'>
             <div className="stat-bar health-bar">

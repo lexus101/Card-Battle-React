@@ -1,6 +1,6 @@
 import "./css/CardUI.css";
 
-export const HandCardView = ({ onPress, player, card, card_idx, selectedCardIdx }) => {
+export const HandCardView = ({ onPress, player, card, card_idx, selectedCard }) => {
     
     if (player===null) return (
         <button
@@ -30,13 +30,9 @@ export const HandCardView = ({ onPress, player, card, card_idx, selectedCardIdx 
     )
     
     const baseCost = card.energy_cost ?? 1;
-    const reduction =
-        (player.gameManager?.player?.costReductionCharges ?? 0) > 0
-            ? (player.gameManager?.player?.costReductionAmount ?? 0)
-            : 0;
-
+    const reduction = player.costReduction[0] ? player.costReduction[0] : 0
     const displayCost = Math.max(0, baseCost - reduction);
-    const canPlay = (player.gameManager?.energy ?? 0) >= displayCost;
+    const canPlay = (player.energy ?? 0) >= displayCost;
     
     return (
         <button
@@ -44,7 +40,7 @@ export const HandCardView = ({ onPress, player, card, card_idx, selectedCardIdx 
                 e.stopPropagation();
                 if (canPlay) onPress();
             }}
-            className={`card card--fullart ${card_idx === selectedCardIdx ? 'selectedCard' : ''} ${!canPlay ? 'card--disabled' : ''}`}
+            className={`card card--fullart ${card_idx === selectedCard.idx ? 'selectedCard' : ''} ${!canPlay ? 'card--disabled' : ''}`}
             style={{ "--i": card_idx, "--n": (player ? player.deck.hand.length: "") }}
         >
             <img className="card__artFull" src={card.image} alt={card.name} />
