@@ -56,7 +56,7 @@
     "rewardable": true,
     "description":"Deal 4 dmg to target",
     "image": "./Card/Quick_Strike.png",
-        "targets": 1,
+    "targets": 1,
     "energy_cost": 0,
     "effects": [
       { "type": "DAMAGE", "value": 4, "target": "target" }
@@ -165,7 +165,16 @@
     "energy_cost": 1,
     "effects": [
       { "type": "DAMAGE", "value": 4, "target": "target" },
-      { "type": "DAMAGE", "value": 4, "target": "target" }
+       {
+        "type": "CREATE_TEMP_CARD_IN_HAND",
+        "target": "self",
+        "value": {
+          "cardId": "QUICK_STRIKE",
+          "count": 1,
+          "energy_cost": 0,
+          "exhaust": true
+        }
+      }
     ]
   },
   "FIVEFOLD_STRIKE": {
@@ -371,12 +380,12 @@
   "name": "Charge",
   "rarity": "common",
   "rewardable": true,
-  "description":"Apply Charge x3.",
+  "description":"Apply Charge x1.",
   "image": "./Card/Charge.png",
     "targets": 1,
   "energy_cost": 0,
   "effects": [
-    { "type": "CHARGE", "value": 3, "target": "target" }
+    { "type": "CHARGE", "value": 1, "target": "target" }
   ]
   },
   "BLOOD_DRAIN": {
@@ -412,11 +421,147 @@
     "rarity": "epic",
     "rewardable": true,
     "description": "Double the Damage of your next attack",
-    "image": "./Card/Regeneration.png",
+    "image": "./Card/Death_Cleave.png",
     "targets": 0,
     "energy_cost": 1,
     "effects": [
       { "type": "MULTIPLY_DAMAGE", "value": 1, "target": "self" }
+    ]
+  },
+    "SWEEP": {
+    "id": "SWEEP",
+    "name": "Sweep",
+    "rarity": "uncommon",
+    "rewardable": true,
+    "description": "Deal 3 dmg to all selected enemies",
+    "image": "./Card/Sweep.png",
+    "targets": 999,
+    "energy_cost": 1,
+    "effects": [
+      { "type": "DAMAGE", "value": 3, "target": "target" }
+    ]
+  },
+    "SPIN_STRIKE": {
+    "id": "SPIN_STRIKE",
+    "name": "Spin Strike",
+    "rarity": "epic",
+    "rewardable": true,
+    "description": "Deal 2 dmg to 3 selected enemies x3.",
+    "image": "./Card/Spin_Strike.png",
+    "targets": 3,
+    "energy_cost": 1,
+    "effects": [
+      { "type": "DAMAGE", "value": 2, "target": "target" },
+      { "type": "DAMAGE", "value": 2, "target": "target" },
+      { "type": "DAMAGE", "value": 2, "target": "target" }
+    ]
+  },
+    "SHIELD_BASH": {
+    "id": "SHIELD_BASH",
+    "name": "Shield Bash",
+    "rarity": "epic",
+    "rewardable": true,
+    "description": "Deal half of shield dmg",
+    "image": "./Card/Shield_Bash.png",
+    "targets": 1,
+    "energy_cost": 1,
+    "effects": [
+      { "type": "DAMAGE", "value": 10, "target": "target" }
+    ]
+  },
+    "FOLLOWING_STRIKE": {
+    "id": "FOLLOWING_STRIKE",
+    "name": "Following Strike",
+    "rarity": "uncommon",
+    "rewardable": true,
+    "description": "Deal 2 dmg. Draw 1.",
+    "image": "./Card/Following_Strike.png",
+    "targets": 1,
+    "energy_cost": 0,
+    "effects": [
+      { "type": "DAMAGE", "value": 2, "target": "target" },
+      { "type": "DRAW", "value": 1, "target": "self" }
+    ]
+  },
+    "FORTRESS": {
+    "id": "FORTRESS",
+    "name": "Fortress",
+    "rarity": "rare",
+    "rewardable": true,
+    "description": "Gain 2 strength. Gain 14 shield.",
+    "image": "./Card/Fortress.png",
+    "targets": 0,
+    "energy_cost": 2,
+    "effects": [
+      { "type": "SHIELD", "value": 14, "target": "self" },
+      { "type": "CHARGE", "value": 2, "target": "self" }
+    ]
+  },
+   "BRACE": {
+    "id": "BRACE",
+    "name": "Brace",
+    "rarity": "rare",
+    "rewardable": true,
+    "description": "Gain 6 shield. Draw 1.",
+    "image": "./Card/Brace.png",
+    "targets": 0,
+    "energy_cost": 1,
+    "effects": [
+      { "type": "SHIELD", "value": 6, "target": "self" },
+      { "type": "DRAW", "value": 1, "target": "self" }
+    ]
+  },
+    "QUICK_GUARD": {
+    "id": "QUICK_GUARD",
+    "name": "Quick Guard",
+    "rarity": "uncommon",
+    "rewardable": true,
+    "description": "Gain 4 shield.",
+    "image": "./Card/Quick_Guard.png",
+    "targets": 0,
+    "energy_cost": 0,
+    "effects": [
+      { "type": "SHIELD", "value": 4, "target": "self" }
+    ]
+  },
+    "ACCUMULATE": {
+    "id": "ACCUMULATE",
+    "name": "Accumulate",
+    "rarity": "epic",
+    "rewardable": true,
+    "description": "Gain 3 strength.",
+    "image": "./Card/Accumulate.png",
+    "targets": 0,
+    "energy_cost": 1,
+    "effects": [
+      { "type": "CHARGE", "value": 3, "target": "self" }
+    ]
+  },
+    "DEATH_CLEAVE": {
+    "id": "DEATH_CLEAVE",
+    "name": "Death Cleave",
+    "rarity": "legendary",
+    "rewardable": true,
+    "description": "Deak 35 dmg. Your next card +2 cost,",
+    "image": "./Card/Death_Cleave.png",
+    "targets": 1,
+    "energy_cost": 2,
+    "effects": [
+      { "type": "DAMAGE", "value": 35, "target": "target" },
+      { "type": "REDUCE_NEXT_CARDS_COST", "value": { "amount": -2, "charges": 1 }, "target": "self" }
+    ]
+  },
+   "LAST_DEFENSE": {
+    "id": "LAST_DEFENSE",
+    "name": "Last Defense",
+    "rarity": "epic",
+    "rewardable": true,
+    "description": "Gain Shield equal to your missing hp.",
+    "image": "./Card/Last_Defense.png",
+    "targets": 0,
+    "energy_cost": 1,
+    "effects": [
+      { "type": "SHIELD", "value": 8, "target": "self" }
     ]
   },
   "MULTISELECT": {
@@ -425,11 +570,25 @@
     "rarity": "legendary",
     "rewardable": true,
     "description": "Your next card allow to select 1 more target",
-    "image": "./Card/Regeneration.png",
+    "image": "./Card/Multiselect.png",
     "targets": 0,
     "energy_cost": 1,
     "effects": [
       { "type": "APPLY_MULTISELECT", "value": 1, "target": "self" }
     ]
+  },
+  "PREPRATION":{
+    "id": "PREPRATION",
+    "name": "Prepration",
+    "rarity": "legendary",
+    "rewardable": true,
+    "description": "Your next card triggers again",
+    "image": "./Card/Regeneration.png",
+    "targets": 0,
+    "energy_cost": 1,
+    "effects": [
+      { "type": "APPLY_PREPRATION", "value": 1, "target": "self" }
+    ]
   }
+
 }
