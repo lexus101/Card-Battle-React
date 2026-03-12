@@ -405,5 +405,31 @@
     "effects": [
       { "type": "APPLY_REGEN", "value": 5, "target": "self" }
     ]
+  },
+  "EXECUTION": {
+    "id": "EXECUTION",
+    "name": "Execution",
+    "rarity": "epic",
+    "rewardable": true,
+    "description": "Double the Damage of your next attack",
+    "image": "./Card/Regeneration.png",
+    "targets": 0,
+    "energy_cost": 1,
+    "effects": [
+      { "type": "MULTIPLY_DAMAGE", "value": 1, "target": "self" }
+    ]
+  },
+  "MULTISELECT": {
+    "id": "MULTISELECT",
+    "name": "Multiselect",
+    "rarity": "legendary",
+    "rewardable": true,
+    "description": "Your next card allow to select 1 more target",
+    "image": "./Card/Regeneration.png",
+    "targets": 0,
+    "energy_cost": 1,
+    "effects": [
+      { "type": "APPLY_MULTISELECT", "value": 1, "target": "self" }
+    ]
   }
 }

@@ -71,6 +71,8 @@ endTurn() {
     this.player.deck.discardHandAll();
   }
 
+  console.log(1)
+
   this.runEnemyTurn();
   this.updateGame();
 

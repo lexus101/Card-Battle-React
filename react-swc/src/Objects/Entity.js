@@ -11,9 +11,6 @@ export class Entity {
     this.intents = [];
     this.alive = true;
     this.image = image
-
-    this.chargeConsumed = false;
-
     this.costReductionAmount = 0;
     this.costReductionCharges = 0;
 
@@ -25,7 +22,9 @@ export class Entity {
       "regeneratioin": [],
       "fortify": 0,
       "shield": 0,
-      "stun": false,
+      "static": false,
+      "damageMultiplier": 1,
+      "multiselect": 0
     }    
 
     makeObservable(this, {
@@ -35,7 +34,6 @@ export class Entity {
       alive: observable,
       costReductionAmount: observable,
       costReductionCharges: observable,
-
       takeDamage: action,
       applyStack: action,
       checkAlive: action,
@@ -97,15 +95,15 @@ export class Entity {
     if (this.stack.fortify > 0){
       this.fortify -= 1;
     }
+
+    //handle Charge
+    this.stack.charge = 0
   }
 
 
 
   getNextTurnShield() { return Math.floor(this.shield / 2);}
   playCard(target, card){
-    this.chargeConsumed = false;
-
-
     card.effects.forEach(rawEffect => {
           
         const effect = { ...rawEffect }; 
@@ -114,24 +112,27 @@ export class Entity {
         const effect_action = EFFECT_ACTIONS[effect.type];
         if (effect_action) {
             if (effect.target == "target"){ 
-              target.forEach(element => {
-                effect_action(element, effect.value); 
-              });
+              if (Array.isArray(target)){
+                  target.forEach(element => {
+                    effect_action(element, effect.value); 
+                  });
+              } else {
+                effect_action(target, effect.value)
+              }
             }
             else { effect_action(this, effect.value); }
         }
     });
-    if (this.chargeConsumed) {this.charge = 0;}
     this.isFrozen = false;  
   }
   effectModifier(effect){
- if (this.stack.freeze == 3) {
-    effect.type = "NULL";
-    return;
-  }
+    if (this.stack.freeze == 3) {
+      effect.type = "NULL";
+      return;
+    }
     if (effect.type == "DAMAGE"){ 
       effect.value += this.stack.charge
-      this.chargeConsumed = true;
+      effect.value *= this.stack.damageMultiplier
     }
   }
 

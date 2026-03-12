@@ -19,7 +19,6 @@ export const BattleView = observer(() => {
   const enemies = gameManager.enemies
   const current_enemies = enemies[gameManager.enemies_index] || [];
   const [selectedCard, setSelectedCard] = useState({"card":null, "idx":null});
-
   const [selectedTargets, setSelectedTargets] = useState({"targets":[], "idx":[]});
 
   
@@ -42,7 +41,7 @@ export const BattleView = observer(() => {
         let newTargetsIdx = [...prev.idx, idx];
 
         // Enforce max target limit
-        if (newTargets.length > selectedCard.card.targets) {
+        if (newTargets.length > selectedCard.card.targets + player.stack.multiselect) {
           newTargets.shift();
           newTargetsIdx.shift();
         }
