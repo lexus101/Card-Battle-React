@@ -70,8 +70,6 @@ export const BattleView = observer(() => {
     setSelectedTargets({"targets":[], "idx":[]})
   }
 
-  // Placeholder synergy value (replace with actual store data)
-  const synergy = 3;
 
 
 
@@ -81,17 +79,11 @@ export const BattleView = observer(() => {
       className='battleContainer'
       // onClick={() => setSelectedCardIdx(null)}
     >
-      {/* Top Bar: Synergy (left) and Turn (center) */}
       <div className='top-bar'>
-        <div className='synergy'>
-          <span className='synergy-icon'>⚡</span>
-          <span className='synergy-value'>Synergy: {synergy}</span>
-        </div>
         <div className='turn-indicator'> Turn {gameManager.turn} </div>
         <div className='top-right-placeholder'>{/* optional right element */}
             <button className='clickable setting'>Setting</button>
-            </div>
-        
+        </div>
       </div>
 
       {/* Enemies Row - each enemy now in a wrapper with intents on side */}
