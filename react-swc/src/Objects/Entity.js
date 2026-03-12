@@ -24,7 +24,8 @@ export class Entity {
       "shield": 0,
       "static": false,
       "damageMultiplier": 1,
-      "multiselect": 0
+      "multiselect": 0,
+      "prepration": 1
     }    
 
     makeObservable(this, {
@@ -43,7 +44,9 @@ export class Entity {
   applyStack(type, amount){
     if (type == "Regeneration"){ this.stack["Regeneration"].push(turns); return;}
     if (type == "Stun"){ this.stack["Stun"] = true; }
+    console.log(type, this.stack[type], amount)
     this.stack[type] += amount;
+    console.log(type, this.stack[type], amount)
   }
 
   takeDamage(amount, type) {
@@ -104,25 +107,26 @@ export class Entity {
 
   getNextTurnShield() { return Math.floor(this.shield / 2);}
   playCard(target, card){
+    
     card.effects.forEach(rawEffect => {
+          const effect = { ...rawEffect }; 
+          this.effectModifier(effect);
           
-        const effect = { ...rawEffect }; 
-        this.effectModifier(effect);
-        
-        const effect_action = EFFECT_ACTIONS[effect.type];
-        if (effect_action) {
-            if (effect.target == "target"){ 
-              if (Array.isArray(target)){
-                  target.forEach(element => {
-                    effect_action(element, effect.value); 
-                  });
-              } else {
-                effect_action(target, effect.value)
+          const effect_action = EFFECT_ACTIONS[effect.type];
+          if (effect_action) {
+              if (effect.target == "target"){ 
+                if (Array.isArray(target)){
+                    target.forEach(element => {
+                      effect_action(element, effect.value); 
+                    });
+                } else {
+                  effect_action(target, effect.value)
+                }
               }
-            }
-            else { effect_action(this, effect.value); }
-        }
+              else { effect_action(this, effect.value); }
+          }
     });
+
     this.isFrozen = false;  
   }
   effectModifier(effect){
@@ -168,7 +172,13 @@ export class Player extends Entity{
       this.costReduction.splice(0,1)
     }
     this.energy -= cost;
-    super.playCard(target, card);
+    let init_prep = this.stack.prepration
+    for (let i = 0; i < init_prep; i++){
+      super.playCard(target, card);
+      this.stack.prepration -= 1;
+    }
+    this.stack.prepration += 1;
+    console.log("prepration prepration", this.stack.prepration)
     this.deck.discardFromHand(idx);
   }
   drawCard(n){

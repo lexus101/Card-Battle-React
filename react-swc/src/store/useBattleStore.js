@@ -14,7 +14,7 @@ function buildBattleState(set) {
       "GUARD",
       // "RUSH",
       // "RUSH",
-      "MULTISELECT",
+      "PREPRATION",
       "EXECUTION",
       "FIVEFOLD_STRIKE",
     //"FIVEFOLD_STRIKE",
