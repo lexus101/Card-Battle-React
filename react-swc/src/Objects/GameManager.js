@@ -42,7 +42,7 @@ export class GameManager {
   startPlayerTurn() {
     this.player.deck.discardHandAll();
     this.playerTurn = true;
-    this.energy = this.maxEnergy;
+    this.player.energy = this.player.maxEnergy;
     this.player.drawCard(this.cardsPerTurn);
     this.player.handleOverTurnEffects()
     this.updateGame();
