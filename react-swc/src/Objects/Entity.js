@@ -143,11 +143,11 @@ export class Entity {
       effect.type = "NULL";
       return;
     }
-    // if (effect.type == "DAMAGE"){ 
-    //   effect.value += this.stack.charge
-    //   effect.value *= this.stack.damageMultiplier
-    //   this.stack.damageMultiplier = 1
-    // }
+    if (effect.type == "DAMAGE"){ 
+      effect.value += this.stack.charge
+      effect.value *= this.stack.damageMultiplier
+      this.stack.damageMultiplier = 1
+    }
   }
 
 }
