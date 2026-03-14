@@ -44,14 +44,10 @@ export class Entity {
   applyStack(type, amount){
     if (type == "Regeneration"){ this.stack["Regeneration"].push(turns); return;}
     if (type == "Stun"){ this.stack["Stun"] = true; }
-    console.log(type, this.stack[type], amount)
     this.stack[type] += amount;
-    console.log(type, this.stack[type], amount)
   }
 
-  takeDamage(amount, type) {
-    console.log(amount, type)
-    console.log(this.health, amount)
+  takeDamage(amount) {
     if (this.stack.shield >= amount){
      this.stack.shield -= amount;
     } else{
@@ -91,7 +87,7 @@ export class Entity {
 
     //handle Shield
     if (this.stack.shield > 0 && this.stack.fortify <= 0){
-      Math.floor(this.stack.shield /= 2)
+      this.stack.shield = Math.floor(this.stack.shield /2)
     }
 
     //handle Fortify
@@ -109,22 +105,35 @@ export class Entity {
   playCard(target, card){
     
     card.effects.forEach(rawEffect => {
+          console.log(rawEffect)
           const effect = { ...rawEffect }; 
           this.effectModifier(effect);
-          
+          console.log(effect)
           const effect_action = EFFECT_ACTIONS[effect.type];
+
+
           if (effect_action) {
-              if (effect.target == "target"){ 
-                if (Array.isArray(target)){
-                    target.forEach(element => {
-                      effect_action(element, effect.value); 
-                    });
-                } else {
-                  effect_action(target, effect.value)
-                }
+              if (Array.isArray(target)){
+                  console.log(effect_action)
+                  target.forEach(element => {
+                    const context = {
+                      source: this, // 'this' is the entity playing the card
+                      target: (effect.target === "self") ? this : element,
+                      card: card
+                    };
+                    console.log(effect)
+                    effect_action(context, effect); 
+                  });
+              } else {
+                const context = {
+                  source: this, // 'this' is the entity playing the card
+                  target: (effect.target === "self") ? this : target,
+                  card: card
+                };
+                effect_action(context, effect)
               }
-              else { effect_action(this, effect.value); }
-          }
+            }
+          
     });
 
     this.isFrozen = false;  
@@ -134,11 +143,11 @@ export class Entity {
       effect.type = "NULL";
       return;
     }
-    if (effect.type == "DAMAGE"){ 
-      effect.value += this.stack.charge
-      effect.value *= this.stack.damageMultiplier
-      this.stack.damageMultiplier = 1
-    }
+    // if (effect.type == "DAMAGE"){ 
+    //   effect.value += this.stack.charge
+    //   effect.value *= this.stack.damageMultiplier
+    //   this.stack.damageMultiplier = 1
+    // }
   }
 
 }
@@ -178,7 +187,6 @@ export class Player extends Entity{
       this.stack.preparation -= 1;
     }
     this.stack.preparation += 1;
-    console.log("preparation preparation", this.stack.preparation)
     this.deck.discardFromHand(idx);
   }
   drawCard(n){

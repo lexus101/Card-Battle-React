@@ -4,29 +4,29 @@ export const CardLibrary = await response.json()
 
 
 export const EFFECT_ACTIONS = {
-  DAMAGE: (target, value) => target.takeDamage(value),
-  HEAL: (target, value) => target.modifyHealth(value), // Or addHeal
-  DRAW: (target, value) => target.drawCard(value),
-  SHIELD: (target, value) => target.applyStack("shield", value),
-  APPLY_BURN: (target, value) => target.applyStack("burn", value),
-  APPLY_WET: (target, value) => target.applyStack("flow", value),
-  DAMAGE_FIRE: (target, value) => target.takeDamage(value, 'fire'),
-  DAMAGE_WATER: (target, value) => target.takeDamage(value, 'water'),
-  DAMAGE_ELEC: (target, value) => target.takeDamage(value, 'elec'),
-  FREEZE: (target, value) => target.applyStack("freeze", value),
-  CHARGE: (target, value) => target.applyStack("charge", value),
-  APPLY_REGEN: (target, value) => target.applyStack("regeneration", value),
-  APPLY_FORTIFY: (target, value) => target.applyStack("fortify", value),
-  MULTIPLY_DAMAGE: (target, value) => target.applyStack("damageMultiplier", value),
-  APPLY_MULTISELECT: (target, value) => target.applyStack("multiselect", value),
-  APPLY_PREPARATION: (target, value) => target.applyStack("preparation", value),
-  REDUCE_NEXT_CARDS_COST: (target, value) => {
+  DAMAGE: (context, effect) => {
+    const amount = resolveValue(context, effect.value);
+    context.target.takeDamage(amount);
+  },
+  HEAL: (context, effect) => {
+    context.target.modifyHealth(effect.value)
+  }, // Or addHeal
+  DRAW: (context, effect) => {
+    context.target.drawCard(effect.value)
+  },
+  APPLY_STACK: (context, effect) => {
+    const amount = resolveValue(context, effect.value)
+    context.target.applyStack(effect.stack_name, amount)
+  },
+  REDUCE_NEXT_CARDS_COST: (context, effect) => {
+    let value = effect.value
     for (let i = 0; i < value.charges; i++){
-      if (target.costReduction[i]){ target.costReduction[i] += value.amount }
-      else {target.costReduction.push(value.amount)}
+      if (context.target.costReduction[i]){ context.target.costReduction[i] += value.amount }
+      else {context.target.costReduction.push(value.amount)}
     }
   },
-  CREATE_TEMP_CARD_IN_HAND: (target, value) => {
+  CREATE_TEMP_CARD_IN_HAND: (context, effect) => {
+  let value = effect.value
   const baseCard = CardLibrary[value.cardId];
   if (!baseCard) return;
 
@@ -38,8 +38,69 @@ export const EFFECT_ACTIONS = {
       temporary: true,
     };
 
-    target.deck.hand.push(tempCard);
+    context.target.deck.hand.push(tempCard);
+    console.log(tempCard)
   }
   },
  
+};
+
+
+
+
+
+
+
+
+
+
+
+
+// Helper to get nested properties like "target.health"
+const getProp = (context, path) => {
+  //case 1: static number prop
+  if (typeof path === 'number') return path;
+  //case 2: dynamic prop
+  const keys = path.split('.');
+  return keys.reduce((obj, key) => obj?.[key], context);
+};
+const calculate = (a, b, o) =>{
+  switch (o) {
+    case '+':
+      return a + b;
+    case '-':
+      return a - b;
+    case '*':
+      return a * b;
+    case '/':
+      return a / b;
+    default:
+      return 0;
+  }
+}
+// Calculate dynamic value
+const resolveValue = (context, value) => {
+  // Case 1: It's just a number (Static)
+  if (typeof value === 'number') return value;
+  // Case 2: It's a dynamic formula (Variable)
+  const params = value.params;
+
+  const operations = new Set(['+', '-', '*', '/'])
+  const stack = []
+  console.log("params", params)
+  params.forEach(e => {
+    console.log(operations.has(e))
+    if (operations.has(e)){
+      let second = stack.pop();
+      let first = stack.pop();
+      stack.push(calculate(first, second, e));
+    }
+    else {
+      stack.push(getProp(context, e));
+    }
+    console.log(stack)
+  });
+
+  console.log("stack", stack[0])
+  return stack[0]
 };

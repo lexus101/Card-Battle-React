@@ -56,7 +56,12 @@ export const BattleView = observer(() => {
   const handleCardSelect = (card, idx) => {
     if (selectedCard.idx != idx){ 
       setSelectedCard({"card": card, "idx": idx}) 
-      setSelectedTargets({"targets":[], "idx":[]})
+      if (card.targets == 0){
+        setSelectedTargets({"targets":[player], "idx":[0]})
+      } else {
+        setSelectedTargets({"targets":[], "idx":[]})
+      }
+
     }
     else {
        setSelectedCard({"card":null, "idx": null})
@@ -65,76 +70,76 @@ export const BattleView = observer(() => {
   }
 
 
-const getCardDamageHits = (card, totalDamage) => {
-  if (!card || !card.effects) return [totalDamage];
+// const getCardDamageHits = (card, totalDamage) => {
+//   if (!card || !card.effects) return [totalDamage];
 
-  const hits = [];
+//   const hits = [];
 
-  for (const effect of card.effects) {
-    if (effect.type !== "DAMAGE") continue;
+//   for (const effect of card.effects) {
+//     if (effect.type !== "DAMAGE") continue;
 
-    // 1. 明确写单段数值
-    if (typeof effect.value === "number" && !effect.hits && !effect.times && !effect.repeat) {
-      hits.push(effect.value);
-      continue;
-    }
+//     // 1. 明确写单段数值
+//     if (typeof effect.value === "number" && !effect.hits && !effect.times && !effect.repeat) {
+//       hits.push(effect.value);
+//       continue;
+//     }
 
-    // 2. 明确写多段次数
-    const count = effect.hits || effect.times || effect.repeat || 1;
-    const value = effect.value || effect.amount || 0;
+//     // 2. 明确写多段次数
+//     const count = effect.hits || effect.times || effect.repeat || 1;
+//     const value = effect.value || effect.amount || 0;
 
-    for (let i = 0; i < count; i++) {
-      hits.push(value);
-    }
-  }
+//     for (let i = 0; i < count; i++) {
+//       hits.push(value);
+//     }
+//   }
 
-  // 如果 card 里没成功读出来，就退回总伤害单段显示
-  if (hits.length === 0) return [totalDamage];
+//   // 如果 card 里没成功读出来，就退回总伤害单段显示
+//   if (hits.length === 0) return [totalDamage];
 
-  return hits;
-};
+//   return hits;
+// };
 
 
   const handlePlayCard = () => {
       if (selectedCard.idx === null || selectedTargets.targets.length === 0) return;
 
   // 1. 记录出牌前血量
-  const beforeHpMap = new Map();
-  selectedTargets.targets.forEach((target, i) => {
-    // 只处理敌人，player 不做这个受击飘字
-    if (selectedTargets.idx[i] !== 0) {
-      beforeHpMap.set(selectedTargets.idx[i], target.health);
-    }
-  });
+//   const beforeHpMap = new Map();
+//   selectedTargets.targets.forEach((target, i) => {
+//     // 只处理敌人，player 不做这个受击飘字
+//     if (selectedTargets.idx[i] !== 0) {
+//       beforeHpMap.set(selectedTargets.idx[i], target.health);
+//     }
+//   });
 
-    //!! 2. 正常出牌(NEEDED)
+//     //!! 2. 正常出牌(NEEDED)
     gameManager.playCard(selectedTargets.targets, selectedCard.idx);
 
- // 3. 计算受击结果
-  const newHitFxMap = {};
+//  // 3. 计算受击结果
+//   const newHitFxMap = {};
 
-  selectedTargets.targets.forEach((target, i) => {
-    const targetIdx = selectedTargets.idx[i];
+//   selectedTargets.targets.forEach((target, i) => {
+//     const targetIdx = selectedTargets.idx[i];
 
-    // 跳过 player
-    if (targetIdx === 0) return;
+//     // 跳过 player
+//     if (targetIdx === 0) return;
 
-    const beforeHp = beforeHpMap.get(targetIdx);
-    const afterHp = target.health;
-    const totalDamage = Math.max(0, beforeHp - afterHp);
+//     const beforeHp = beforeHpMap.get(targetIdx);
+//     const afterHp = target.health;
+//     const totalDamage = Math.max(0, beforeHp - afterHp);
 
-    if (totalDamage > 0) {
-      const hits = getCardDamageHits(selectedCard.card, totalDamage);
+//     if (totalDamage > 0) {
+//       const hits = getCardDamageHits(selectedCard.card, totalDamage);
 
-      newHitFxMap[targetIdx] = {
-        hits,
-        instanceKey: `${targetIdx}-${Date.now()}-${i}`
-      };
-    }
-  });
+//       newHitFxMap[targetIdx] = {
+//         hits,
+//         instanceKey: `${targetIdx}-${Date.now()}-${i}`
+//       };
+//     }
+//   });
 
-  // 4. 触发特效
-  setHitFxMap(newHitFxMap);
+//   // 4. 触发特效
+//   setHitFxMap(newHitFxMap);
 
 //!!清空选择（NEEDED）
     setSelectedCard({"card":null, "idx": null});
@@ -170,7 +175,7 @@ const getCardDamageHits = (card, totalDamage) => {
           />
         ))}
       </div>
-
+ 
       {/* Bottom Layout */}
       <div className='footerRow'>
           {/* Left Section: Deck above, then Player + Refresh side by side */}

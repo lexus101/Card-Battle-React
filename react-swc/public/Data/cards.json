@@ -33,7 +33,7 @@
     "targets": 0,
     "energy_cost": 2,
     "effects": [
-      { "type": "SHIELD", "value": 20, "target": "self" }
+      { "type": "APPLY_STACK", "stack_name": "shield", "value": 20, "target": "self" }
     ]
   },
   "STRIKE": {
@@ -69,10 +69,10 @@
     "rewardable": true,
     "description":"Gain 8 Shield.",
     "image": "./Card/Defend.png",
-    "target": 0,
+    "targets": 0,
     "energy_cost": 1,
     "effects": [
-      { "type": "SHIELD", "value": 8, "target": "self" }
+      { "type": "APPLY_STACK", "value": 8, "stack_name": "shield", "target": "self"}
     ]
   },
   "FORTIFY": {
@@ -85,7 +85,7 @@
     "targets": 0,
     "energy_cost": 0,
     "effects": [
-      { "type": "APPLY_FORTIFY", "value": 2, "target": "self" }
+      { "type": "APPLY_STACK", "stack_name": "fortify", "value": 2, "target": "self" }
     ]
   },
   "PATCH_UP": {
@@ -111,7 +111,7 @@
     "targets": 0,
     "energy_cost": 0,
     "effects": [
-      { "type": "REDUCE_NEXT_CARDS_COST", "value": { "amount": 1, "charges": 1 }, "target": "self" }
+      { "type": "REDUCE_NEXT_CARDS_COST", "value": 1, "charges": 1 , "target": "self" }
     ]
   },
   "FOCUS": {
@@ -226,8 +226,8 @@
     "targets": 2,
     "energy_cost": 1,
     "effects": [
-      { "type": "DAMAGE_FIRE", "value": 4, "target": "target" },
-      { "type": "APPLY_BURN", "value": 4, "target": "target" }
+      { "type": "DAMAGE", "value": 4, "target": "target" },
+      { "type": "APPLY_STACK", "stack_name": "burn", "value": 4, "target": "target" }
 
     ]
   },
@@ -241,8 +241,8 @@
     "targets": 1,
     "energy_cost": 1,
     "effects": [
-      { "type": "APPLY_BURN", "value": 4, "target": "target" },
-      { "type": "CHARGE", "value": 3, "target": "self" }
+      { "type": "APPLY_STACK", "stack_name": "burn", "value": 4, "target": "target" },
+      { "type": "APPLY_STACK", "stack_name": "charge", "value": 3, "target": "self" }
 
     ]
   },
@@ -256,8 +256,8 @@
     "targets": 1,
     "energy_cost": 0,
     "effects": [
-      { "type": "APPLY_BURN", "value": 2, "target": "target" },
-      { "type": "DAMAGE_FIRE", "value": 1, "target": "target" }
+      { "type": "APPLY_STACK", "stack_name": "burn", "value": 2, "target": "target" },
+      { "type": "DAMAGE", "value": 1, "target": "target" }
 
     ]
   },
@@ -271,7 +271,7 @@
     "targets": 1,
     "energy_cost": 1,
     "effects": [
-      { "type": "APPLY_BURN", "value": 6, "target": "target" }
+      { "type": "APPLY_STACK", "stack_name": "burn", "value": 6, "target": "target" }
 
     ]
   },
@@ -285,7 +285,7 @@
     "targets": 1,
     "energy_cost": 1,
     "effects": [
-      { "type": "DAMAGE_FIRE", "value": 6, "target": "target" }
+      { "type": "DAMAGE", "value": 6, "target": "target" }
 
     ]
   },
@@ -299,11 +299,11 @@
     "targets": 1,
     "energy_cost": 1,
     "effects": [
-      { "type": "DAMAGE_FIRE", "value": 1, "target": "target" },
-      { "type": "DAMAGE_FIRE", "value": 1, "target": "target" },
-      { "type": "DAMAGE_FIRE", "value": 1, "target": "target" },
-      { "type": "DAMAGE_FIRE", "value": 1, "target": "target" },
-      { "type": "DAMAGE_FIRE", "value": 1, "target": "target" }
+      { "type": "DAMAGE", "value": 1, "target": "target" },
+      { "type": "DAMAGE", "value": 1, "target": "target" },
+      { "type": "DAMAGE", "value": 1, "target": "target" },
+      { "type": "DAMAGE", "value": 1, "target": "target" },
+      { "type": "DAMAGE", "value": 1, "target": "target" }
 
     ]
     },
@@ -317,7 +317,7 @@
     "targets": 1,
     "energy_cost": 0,
     "effects": [
-      { "type": "DAMAGE_FIRE", "value": 1, "target": "target" }
+      { "type": "DAMAGE", "value": 1, "target": "target" }
 
     ]
   },
@@ -331,7 +331,7 @@
     "targets": 1,
     "energy_cost": 1,
     "effects": [
-      { "type": "SHIELD", "value": 8, "target": "target" }
+      { "type": "APPLY_STACK", "stack_name": "shield", "value": 8, "target": "target" }
 
     ]
   },
@@ -344,8 +344,8 @@
     "description":"Deal 5 water dmg. Apply Wet x1.",
     "energy_cost": 1,
     "effects": [
-      { "type": "DAMAGE_WATER", "value": 5, "target": "target" },
-      { "type": "APPLY_WET", "value": 2, "target": "target" }
+      { "type": "DAMAGE", "value": 5, "target": "target" },
+      { "type": "APPLY_STACK", "stack_name": "flow", "value": 2, "target": "target" }
     ]
   },
   "LIGHTNING_STRIKE": {
@@ -358,7 +358,7 @@
     "targets": 1,
     "energy_cost": 1,
     "effects": [
-      { "type": "DAMAGE_ELEC", "value": 5, "target": "target" }
+      { "type": "DAMAGE", "value": 5, "target": "target" }
     ]
   },
   "ICE_SHARD": {
@@ -371,7 +371,7 @@
     "targets": 1,
     "energy_cost": 1,
     "effects": [
-      { "type": "FREEZE", "value": 0, "target": "target" },
+      { "type": "APPLY_STACK", "stack_name": "freeze", "value": 1, "target": "target" },
       { "type": "DAMAGE", "value": 3, "target": "target" }
     ]
   },
@@ -385,7 +385,7 @@
     "targets": 1,
   "energy_cost": 0,
   "effects": [
-    { "type": "CHARGE", "value": 1, "target": "target" }
+    { "type": "APPLY_STACK", "stack_name": "charge", "value": 1, "target": "target" }
   ]
   },
   "BLOOD_DRAIN": {
@@ -412,7 +412,7 @@
     "targets": 0,
     "energy_cost": 1,
     "effects": [
-      { "type": "APPLY_REGEN", "value": 5, "target": "self" }
+      { "type": "APPLY_STACK", "stack_name": "regeneration", "value": 5, "target": "self" }
     ]
   },
   "EXECUTION": {
@@ -425,7 +425,7 @@
     "targets": 0,
     "energy_cost": 1,
     "effects": [
-      { "type": "MULTIPLY_DAMAGE", "value": 1, "target": "self" }
+      { "type": "APPLY_STACK", "stack_name": "damageMultiplier", "value": 1, "target": "self" }
     ]
   },
     "SWEEP": {
@@ -466,7 +466,11 @@
     "targets": 1,
     "energy_cost": 1,
     "effects": [
-      { "type": "DAMAGE", "value": 10, "target": "target" }
+      { 
+        "type": "DAMAGE", 
+        "target": "target",
+        "value": { "params": ["source.stack.shield", 0.5, "*"] }
+      }
     ]
   },
     "FOLLOWING_STRIKE": {
@@ -493,8 +497,8 @@
     "targets": 0,
     "energy_cost": 2,
     "effects": [
-      { "type": "SHIELD", "value": 14, "target": "self" },
-      { "type": "CHARGE", "value": 2, "target": "self" }
+      { "type": "APPLY_STACK", "stack_name": "shield", "value": 14, "target": "self" },
+      { "type": "APPLY_STACK", "stack_name": "charge", "value": 2, "target": "self" }
     ]
   },
    "BRACE": {
@@ -507,7 +511,7 @@
     "targets": 0,
     "energy_cost": 1,
     "effects": [
-      { "type": "SHIELD", "value": 6, "target": "self" },
+      { "type": "APPLY_STACK", "stack_name": "shield", "value": 6, "target": "self" },
       { "type": "DRAW", "value": 1, "target": "self" }
     ]
   },
@@ -521,7 +525,7 @@
     "targets": 0,
     "energy_cost": 0,
     "effects": [
-      { "type": "SHIELD", "value": 4, "target": "self" }
+      { "type": "APPLY_STACK", "stack_name": "shield", "value": 4, "target": "self" }
     ]
   },
     "ACCUMULATE": {
@@ -534,7 +538,7 @@
     "targets": 0,
     "energy_cost": 1,
     "effects": [
-      { "type": "CHARGE", "value": 3, "target": "self" }
+      { "type": "APPLY_STACK", "stack_name": "charge", "value": 3, "target": "self" }
     ]
   },
     "DEATH_CLEAVE": {
@@ -548,7 +552,7 @@
     "energy_cost": 2,
     "effects": [
       { "type": "DAMAGE", "value": 35, "target": "target" },
-      { "type": "REDUCE_NEXT_CARDS_COST", "value": { "amount": -2, "charges": 1 }, "target": "self" }
+      { "type": "REDUCE_NEXT_CARDS_COST", "value": -2, "charges": 1 , "target": "self" }
     ]
   },
    "LAST_DEFENSE": {
@@ -561,7 +565,7 @@
     "targets": 0,
     "energy_cost": 1,
     "effects": [
-      { "type": "SHIELD", "value": 8, "target": "self" }
+      { "type": "APPLY_STACK", "stack_name": "shield", "value": 8, "target": "self" }
     ]
   },
   "MULTISELECT": {
@@ -574,7 +578,7 @@
     "targets": 0,
     "energy_cost": 1,
     "effects": [
-      { "type": "APPLY_MULTISELECT", "value": 1, "target": "self" }
+      { "type": "APPLY_STACK", "stack_name": "multiselect", "value": 1, "target": "self" }
     ]
   },
   "PREPARATION":{
@@ -587,7 +591,7 @@
     "targets": 0,
     "energy_cost": 1,
     "effects": [
-      { "type": "APPLY_PREPARATION", "value": 1, "target": "self" }
+      { "type": "APPLY_STACK", "stack_name": "preparation", "value": 1, "target": "self" }
     ]
   }
 
