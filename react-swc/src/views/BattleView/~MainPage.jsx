@@ -180,14 +180,23 @@ export const BattleView = observer(() => {
       <div className='footerRow'>
           {/* Left Section: Deck above, then Player + Refresh side by side */}
           <PlayerUnit onPress={() => handleTargetSelect(player, 0)} player={player} selectedTargets={selectedTargets}></PlayerUnit>
-
+<div className="handSection">
           {/* Hand Section */}
-          <button onClick={handlePlayCard} className="clickable refresh-button"> Play Card </button>
+          {selectedCard.card && (
+            <button
+              onClick={handlePlayCard}
+              className="play-button"
+            >
+              Play Card
+            </button>
+          )}
+
           <div className='handRow'>
             {player.deck.hand.map((card, idx) => (
               <HandCardView key={idx} onPress={() => handleCardSelect(card, idx)} player={player} card={card} card_idx={idx} selectedCard={selectedCard}></HandCardView>
             ))}
           </div>
+        </div>
           <button onClick={gameManager.endTurn} className="clickable refresh-button"> End Turn</button>
       </div>
 
