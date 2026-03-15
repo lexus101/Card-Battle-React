@@ -1,6 +1,6 @@
 import { LoopPattern } from "./mobLogic";
 import { makeAutoObservable, makeObservable, observable, action } from "mobx";
-import { EFFECT_ACTIONS } from "../engine/cardEffects";
+import { EFFECT_ACTIONS, resolveValue } from "../engine/cardEffects";
 import { CardLibrary } from "../engine/cardEffects";
 
 export class Entity {
@@ -107,6 +107,19 @@ export class Entity {
     card.effects.forEach(rawEffect => {
           console.log(rawEffect)
           const effect = { ...rawEffect }; 
+          
+
+            //修复shield bash bug。确保每个param转为数值之后再被damage加成。
+            if (effect.value && typeof effect.value === "object" && Array.isArray(effect.value.params)) {
+            const context = {
+              source: this,
+              target: Array.isArray(target) ? target[0] : target,
+              card
+            };
+
+            effect.value = resolveValue(context, { params: [...effect.value.params] }) ?? 0;
+          }
+
           this.effectModifier(effect);
           console.log(effect)
           const effect_action = EFFECT_ACTIONS[effect.type];

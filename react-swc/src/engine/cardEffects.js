@@ -5,6 +5,10 @@ export const CardLibrary = await response.json()
 
 export const EFFECT_ACTIONS = {
   DAMAGE: (context, effect) => {
+      console.log("[DAMAGE context.source]", context.source);
+  console.log("[DAMAGE source.stack]", context.source?.stack);
+  console.log("[DAMAGE source.stack.shield]", context.source?.stack?.shield);
+  console.log("[DAMAGE raw effect.value]", effect.value);
     const amount = resolveValue(context, effect.value);
     context.target.takeDamage(amount);
   },
@@ -79,7 +83,7 @@ const calculate = (a, b, o) =>{
   }
 }
 // Calculate dynamic value
-const resolveValue = (context, value) => {
+export const resolveValue = (context, value) => {
   // Case 1: It's just a number (Static)
   if (typeof value === 'number') return value;
   // Case 2: It's a dynamic formula (Variable)
