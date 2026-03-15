@@ -92,7 +92,7 @@ export class Entity {
 
     //handle Fortify
     if (this.stack.fortify > 0){
-      this.fortify -= 1;
+      this.stack.fortify -= 1;
     }
 
     //handle Charge

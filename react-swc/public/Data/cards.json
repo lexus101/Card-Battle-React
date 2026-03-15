@@ -301,12 +301,12 @@
     "name": "Fortify",
     "rarity": "uncommon",
     "rewardable": true,
-    "description": "Shield does not decay for 2 turns.",
+    "description": "Shield does not decay for 1 turns.",
     "image": "./Card/Fortify.png",
     "targets": 0,
     "energy_cost": 0,
     "effects": [
-      { "type": "APPLY_STACK", "stack_name": "fortify", "value": 2, "target": "self" }
+      { "type": "APPLY_STACK", "stack_name": "fortify", "value": 1, "target": "self" }
     ]
   },
   "GUARD": {
