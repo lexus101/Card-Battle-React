@@ -89,7 +89,7 @@
     "targets": 1,
     "energy_cost": 0,
     "effects": [
-      { "type": "APPLY_STACK", "stack_name": "charge", "value": 1, "target": "target" }
+      { "type": "APPLY_STACK", "stack_name": "charge", "value": 1, "target": "self" }
     ]
   },
   "COMBUST": {
